@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum ListingStatus {
+  active
+  draft
+  sold
+}
+
+enum TitleStatus {
+  clean
+  salvage
+  stolen
+  lien
+  flood
+}
+
+enum MembershipStatus {
+  none
+  member
+  expiredMember
+}
+
+enum MembershipPaymentStatus {
+  unpaid
+  placeholder_confirmed
+  paid
+}
+
+enum MediaType {
+  image
+  video
+}
+
+enum MediaProvider {
+  cloudflare_images
+  cloudflare_stream
+}
+
+enum ConditionGrade {
+  show_car
+  driver
+  it_runs
+  project
+}
+
+enum PublishFeeMethod {
+  placeholder_checkbox
+  stripe
+}
+
+// Models
+
+model User {
+  id            Int       @id @default(autoincrement())
+  publicId      String?   @unique @default(uuid())
+  username      String?   @unique
+  email         String    @unique
+  passwordHash  String?
+  name          String?
+  phone         String?
+  image         String?
+  emailVerified DateTime?
+
+  stripeCustomerId        String?
+  membershipStatus        MembershipStatus        @default(none)
+  membershipPaymentStatus MembershipPaymentStatus @default(unpaid)
+  membershipPaidAt        DateTime?
+  membershipExpiresAt     DateTime?
+  isAdmin                 Boolean                 @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  listings      Listing[]
+  savedListings SavedListing[]
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("users")
+}
+
+model Listing {
+  id       Int    @id @default(autoincrement())
+  publicId String @unique
+  sellerId Int
+  seller   User   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  listingStatus    ListingStatus    @default(draft)
+  publishedAt      DateTime?
+  featured         Boolean          @default(false)
+  publishFeePaid   Boolean          @default(false)
+  publishFeePaidAt DateTime?
+  publishFeeMethod PublishFeeMethod @default(placeholder_checkbox)
+
+  // Basic Info
+  year                  Int?
+  make                  String?
+  model                 String?
+  vehicleIdentifier     String?
+  mileage               Int?
+  location              String?
+  engine                String?
+  transmission          String?
+  exteriorColor         String?
+  interiorColorMaterial String?
+  askingPrice           Int?
+
+  // Narrative Details
+  optionsAndFeatures String?
+  modifications      String?
+
+  conditionGrade     ConditionGrade?
+  vehicleHistory     String?
+  maintenanceHistory String?
+  titleStatus        TitleStatus?
+  carfaxAvailable    Boolean?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  media         ListingMedia[]
+  savedListings SavedListing[]
+
+  @@map("listings")
+}
+
+model ListingMedia {
+  id        Int     @id @default(autoincrement())
+  listingId Int
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  type       MediaType
+  provider   MediaProvider
+  providerId String
+
+  sortOrder Int
+  isCover   Boolean @default(false)
+  altText   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("listing_media")
+}
+
+model SavedListing {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId Int
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("saved_listings")
+}
+
+// Auth.js Models
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}

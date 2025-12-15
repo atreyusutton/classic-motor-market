@@ -1,26 +1,59 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans-base);
+  --font-serif: var(--font-serif-base);
+  --color-page: #f3f0dc;
+  --color-page-alt: #e9e0b8;
+  --color-brand-dark: #223a3a;
+  --color-brand-gold: #e3c24a;
+  --color-text-main: #2a2a2a;
+  --color-text-muted: #6b6b6b;
+  --color-text-inverse: #f5f5f5;
+  --color-border-soft: #d7cfac;
+  --color-border-strong: #b9aa73;
+  --color-card: #ffffff;
+  --color-card-foreground: #2a2a2a;
+  --color-background: #f3f0dc;
+  --color-foreground: #2a2a2a;
+  --color-primary: #223a3a;
+  --color-primary-foreground: #f5f5f5;
+  --color-secondary: #e9e0b8;
+  --color-secondary-foreground: #223a3a;
+  --color-muted: #e9e0b8;
+  --color-muted-foreground: #6b6b6b;
+  --color-border: #d7cfac;
+  --color-accent: #e3c24a;
+  --color-accent-foreground: #223a3a;
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius-base: 2px;
+}
+
+@layer base {
+  * {
+    @apply border-border-soft outline-brand-dark/10;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-page text-text-main font-sans antialiased;
+    background-image: radial-gradient(circle at top, #f7f3e1 0%, #f3f0dc 45%, #efe7c6 100%);
+    letter-spacing: 0.01em;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif text-brand-dark tracking-[0.08em];
+  }
+  p {
+    @apply leading-relaxed text-text-main;
+  }
 }
