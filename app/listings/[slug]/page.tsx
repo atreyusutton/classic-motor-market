@@ -86,36 +86,36 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="bg-page">
-      <SiteContainer className="space-y-10 py-12 md:py-16">
-        <div className="grid gap-8 lg:grid-cols-[2fr_1fr] lg:items-end">
+      <SiteContainer className="space-y-8 sm:space-y-10 py-8 sm:py-12 md:py-16">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[2fr_1fr] lg:items-end">
           <div className="space-y-2">
-            <p className="font-serif text-xs uppercase tracking-[0.5em] text-brand-gold">
+            <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] sm:tracking-[0.5em] text-brand-gold">
               Listing {listing.publicId}
             </p>
-            <h1 className="font-serif text-4xl text-brand-dark">
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark">
               {listing.year} {listing.make} {listing.model}
             </h1>
-            <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.3em] text-text-muted">
-              <span className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-[0.65rem] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] text-text-muted">
+              <span className="flex items-center gap-1.5 sm:gap-2">
                 <MapPin className="h-3 w-3" /> {listing.location || "Private"}
               </span>
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5 sm:gap-2">
                 <Gauge className="h-3 w-3" /> {listing.mileage ? `${listing.mileage.toLocaleString()} miles` : "Miles undisclosed"}
               </span>
               {conditionLabel && <span className="text-brand-gold">{conditionLabel}</span>}
             </div>
           </div>
           <div className="text-left lg:text-right">
-            <p className="text-xs uppercase tracking-[0.35em] text-text-muted">Asking Price</p>
-            <p className="font-serif text-4xl text-brand-dark">{price}</p>
+            <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Asking Price</p>
+            <p className="font-serif text-3xl sm:text-4xl text-brand-dark">{price}</p>
           </div>
         </div>
 
         <ListingGallery media={listing.media} />
 
-        <div className="grid gap-10 lg:grid-cols-[2fr_1fr]">
-          <div className="space-y-8">
-            <div className="grid gap-4 border border-border-soft bg-page-alt p-6 text-sm uppercase tracking-[0.25em] text-brand-dark/80 sm:grid-cols-2">
+        <div className="grid gap-8 sm:gap-10 lg:grid-cols-[2fr_1fr]">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="grid gap-4 border border-border-soft bg-page-alt p-4 sm:p-6 text-xs sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.25em] text-brand-dark/80 grid-cols-1 sm:grid-cols-2">
               <SpecRow label="Engine" value={listing.engine || "—"} />
               <SpecRow label="Transmission" value={listing.transmission || "—"} />
               <SpecRow
@@ -161,22 +161,22 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          <aside className="space-y-6 border border-border-strong bg-page-alt p-6">
+          <aside className="space-y-5 sm:space-y-6 border border-border-strong bg-page-alt p-4 sm:p-6 order-first lg:order-last">
             <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-text-muted">Acquire This Vehicle</p>
-              <p className="font-serif text-3xl text-brand-dark">{price}</p>
+              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Acquire This Vehicle</p>
+              <p className="font-serif text-2xl sm:text-3xl text-brand-dark">{price}</p>
             </div>
             <div className="space-y-3">
               {isOwner ? (
-                <Button className="w-full text-lg h-12" size="lg" asChild>
+                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" asChild>
                   <Link href="/account/listings">View My Listings</Link>
                 </Button>
               ) : !isLoggedIn ? (
-                <Button className="w-full text-lg h-12" size="lg" asChild>
+                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" asChild>
                   <Link href="/login">Contact Seller</Link>
                 </Button>
               ) : !isMember ? (
-                <Button className="w-full text-lg h-12" size="lg" asChild>
+                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" asChild>
                   <Link href="/account/billing">Contact Seller</Link>
                 </Button>
               ) : (
@@ -192,30 +192,30 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
             <Separator />
             <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.35em] text-text-muted">Seller</p>
-              <p className="font-serif text-lg text-brand-dark">@{sellerDisplayName}</p>
-              <p className="text-xs uppercase tracking-[0.35em] text-text-muted">
+              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Seller</p>
+              <p className="font-serif text-base sm:text-lg text-brand-dark">@{sellerDisplayName}</p>
+              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">
                 Member since {new Date(listing.seller.createdAt).getFullYear()}
               </p>
             </div>
-            <p className="text-[11px] leading-relaxed text-text-muted">
+            <p className="text-[10px] sm:text-[11px] leading-relaxed text-text-muted">
               Classic Motor Market facilitates introductions between members. Inspect vehicles independently and complete
               your own due diligence before transacting.
             </p>
-            <div className="text-xs uppercase tracking-[0.35em] text-text-muted">Listing ID {listing.publicId}</div>
+            <div className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Listing ID {listing.publicId}</div>
           </aside>
         </div>
       </SiteContainer>
 
-      <section className="bg-page-alt py-16">
+      <section className="bg-page-alt py-12 sm:py-16">
         <SiteContainer>
           <div className="flex flex-col gap-4 border-b border-border-soft pb-6 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
-            <h2 className="font-serif text-3xl text-brand-dark">More automobiles from the clubhouse</h2>
-            <Button variant="ghost" asChild>
+            <h2 className="font-serif text-2xl sm:text-3xl text-brand-dark">More automobiles from the clubhouse</h2>
+            <Button variant="ghost" asChild className="w-full sm:w-auto">
               <Link href="/listings">Return to catalogue</Link>
             </Button>
           </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {relatedListings.length > 0 ? (
               relatedListings.map((related) => <ListingCard key={related.id} listing={related} />)
             ) : (
@@ -243,9 +243,9 @@ function NarrativeCard({ title, body }: { title: string; body: string }) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="font-serif text-lg uppercase tracking-[0.4em] text-brand-dark">{title}</CardTitle>
+        <CardTitle className="font-serif text-base sm:text-lg uppercase tracking-[0.35em] sm:tracking-[0.4em] text-brand-dark">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="text-sm leading-relaxed text-text-main whitespace-pre-wrap">{body}</CardContent>
+      <CardContent className="text-xs sm:text-sm leading-relaxed text-text-main whitespace-pre-wrap">{body}</CardContent>
     </Card>
   )
 }

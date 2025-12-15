@@ -13,7 +13,7 @@ export function SiteContainer({
     <div
       className={cn(
         "mx-auto w-full max-w-[1200px]",
-        bleed ? "px-0" : "px-6 lg:px-8",
+        bleed ? "px-0" : "px-4 sm:px-6 lg:px-8",
         className
       )}
       {...props}

@@ -204,21 +204,21 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
   const publishFeeConfirmed = form.watch("publishFeeConfirmed")
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4">
+    <div className="max-w-3xl mx-auto py-6 sm:py-10 px-4 sm:px-6">
       {/* Development Helper - Only show if no initial data */}
       {!initialData && process.env.NODE_ENV === 'development' && (
-        <div className="mb-4 rounded-lg border border-dashed border-yellow-300 bg-yellow-50 p-4">
-          <div className="flex items-center justify-between">
+        <div className="mb-4 rounded-lg border border-dashed border-yellow-300 bg-yellow-50 p-3 sm:p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h3 className="text-sm font-medium text-yellow-800">Development Mode</h3>
-              <p className="text-xs text-yellow-700">Auto-fill the form with sample data to preview the flow</p>
+              <h3 className="text-xs sm:text-sm font-medium text-yellow-800">Development Mode</h3>
+              <p className="text-[0.7rem] sm:text-xs text-yellow-700">Auto-fill the form with sample data to preview the flow</p>
             </div>
             <Button 
               type="button"
               variant="outline" 
               size="sm"
               onClick={fillSampleData}
-              className="border-yellow-300 bg-white hover:bg-yellow-50"
+              className="border-yellow-300 bg-white hover:bg-yellow-50 w-full sm:w-auto"
             >
               Fill Sample Data
             </Button>
@@ -226,11 +226,12 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
         </div>
       )}
 
-      <div className="mb-8">
-        <div className="flex justify-between mb-2">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex justify-between mb-2 gap-1 sm:gap-2">
           {STEPS.map((step) => (
-            <div key={step.id} className={cn("text-sm font-medium", step.id <= currentStep ? "text-primary" : "text-muted-foreground")}>
-              {step.title}
+            <div key={step.id} className={cn("text-[0.65rem] sm:text-xs md:text-sm font-medium truncate", step.id <= currentStep ? "text-primary" : "text-muted-foreground")}>
+              <span className="hidden sm:inline">{step.title}</span>
+              <span className="sm:hidden">{step.id}</span>
             </div>
           ))}
         </div>
@@ -240,12 +241,12 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Step {currentStep}: {STEPS[currentStep - 1].title}</CardTitle>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg sm:text-xl">Step {currentStep}: {STEPS[currentStep - 1].title}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 sm:space-y-6">
           <Form {...form}>
-            <form className="space-y-6">
+            <form className="space-y-4 sm:space-y-6">
               {currentStep === 1 && (
                 <div className="space-y-4">
                   <FormField control={form.control} name="year" render={({ field }) => (
@@ -569,13 +570,13 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
                   )}
 
                   <FormField control={form.control} name="publishFeeConfirmed" render={({ field }) => (
-                    <FormItem className="flex items-start space-x-3 rounded-md border bg-muted/40 p-4">
+                    <FormItem className="flex items-start space-x-3 rounded-md border bg-muted/40 p-3 sm:p-4">
                       <FormControl>
-                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} className="mt-0.5" />
                       </FormControl>
-                      <div className="space-y-1 text-sm">
-                        <FormLabel>I confirm the listing publish fee has been collected.</FormLabel>
-                        <p className="text-muted-foreground">
+                      <div className="space-y-1 text-xs sm:text-sm leading-relaxed">
+                        <FormLabel className="cursor-pointer">I confirm the listing publish fee has been collected.</FormLabel>
+                        <p className="text-muted-foreground text-[0.7rem] sm:text-sm">
                           This temporary checkbox toggles the `Publish & Pay` action. Leave unchecked if you still need to collect payment.
                         </p>
                       </div>
@@ -592,13 +593,13 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <CardFooter className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-4 sm:pt-6">
           <div className="flex w-full gap-2 sm:w-auto">
-            <Button variant="outline" onClick={() => handleStepChange("prev")} disabled={currentStep === 1 || isPending} className="flex-1 sm:flex-none">
+            <Button variant="outline" onClick={() => handleStepChange("prev")} disabled={currentStep === 1 || isPending} className="flex-1 sm:flex-none h-11 sm:h-12">
               Back
             </Button>
             {currentStep < STEPS.length && (
-              <Button onClick={() => handleStepChange("next")} disabled={isPending} className="flex-1 sm:flex-none">
+              <Button onClick={() => handleStepChange("next")} disabled={isPending} className="flex-1 sm:flex-none h-11 sm:h-12">
                 Next Step
               </Button>
             )}
@@ -606,10 +607,10 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
 
           {currentStep === STEPS.length && (
             <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-              <Button variant="secondary" onClick={() => handleAction("draft")} disabled={isPending}>
+              <Button variant="secondary" onClick={() => handleAction("draft")} disabled={isPending} className="h-11 sm:h-12">
                 {isPending ? "Saving..." : "Save Draft"}
               </Button>
-              <Button onClick={() => handleAction("publish")} disabled={isPending || !publishFeeConfirmed}>
+              <Button onClick={() => handleAction("publish")} disabled={isPending || !publishFeeConfirmed} className="h-11 sm:h-12">
                 {isPending ? "Publishing..." : "Publish & Pay"}
               </Button>
             </div>

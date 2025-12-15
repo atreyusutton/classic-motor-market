@@ -53,7 +53,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative isolate min-h-[90vh] overflow-hidden">
+      <section className="relative isolate min-h-[85vh] sm:min-h-[90vh] overflow-hidden">
         <Image
           src="/assets/hero-porsche.png"
           alt="Classic touring car"
@@ -61,35 +61,35 @@ export default async function Home() {
           priority
           className="object-cover"
         />
-        <SiteContainer className="relative flex min-h-[90vh] flex-col items-center justify-center gap-8 px-4 text-center text-white">
+        <SiteContainer className="relative flex min-h-[85vh] sm:min-h-[90vh] flex-col items-center justify-center gap-6 sm:gap-8 px-4 text-center text-white">
           <Image
             src="/assets/cmm-logo-white.png"
             alt="Classic Motor Market monogram"
             width={128}
             height={128}
-            className="h-24 w-auto"
+            className="h-20 sm:h-24 w-auto"
             priority
           />
-          <div className="max-w-3xl space-y-6">
-            <h1 className="font-serif text-4xl font-semibold leading-tight italic text-brand-gold sm:text-5xl lg:text-6xl md:whitespace-nowrap">
+          <div className="max-w-3xl space-y-4 sm:space-y-6 px-2">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight italic text-brand-gold">
               Drive your next adventure...
             </h1>
-            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-white">
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white">
               Classic Motor Market is an affordable member-driven sales platform for European enthusiast vehicles.
             </p>
-            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-white">
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white">
               Built by car enthusiasts for car enthusiasts.
             </p>
           </div>
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <Button asChild size="lg" className="min-w-[200px]">
+          <div className="flex flex-col gap-3 sm:gap-4 w-full sm:w-auto sm:flex-row">
+            <Button asChild size="lg" className="w-full sm:min-w-[200px] h-11 sm:h-12 text-sm sm:text-base">
               <Link href="/listings">Browse Listings</Link>
             </Button>
             <Button
               asChild
               variant="outline"
               size="lg"
-              className="min-w-[200px] border-white/70 text-white hover:bg-white/10"
+              className="w-full sm:min-w-[200px] h-11 sm:h-12 text-sm sm:text-base border-white/70 text-white hover:bg-white/10"
             >
               <Link href="/sell">List An Automobile</Link>
             </Button>
@@ -108,27 +108,27 @@ export default async function Home() {
         />
       </section>
 
-      <section className="bg-page py-16 md:py-20">
-        <SiteContainer className="grid gap-12">
-          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-4">
+      <section className="bg-page py-12 sm:py-16 md:py-20">
+        <SiteContainer className="grid gap-8 sm:gap-12">
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
             <Image
               src="/assets/ff-logo.png"
               alt="Fuelfed logo"
               width={140}
               height={140}
-              className="h-20 w-auto"
+              className="h-16 sm:h-20 w-auto"
             />
-            <div className="h-px w-16 bg-border-strong sm:h-16 sm:w-px" />
+            <div className="h-px w-12 sm:w-16 bg-border-strong sm:h-16 sm:w-px" />
             <Image
               src="/assets/cmm-logo-blue.png"
               alt="Classic Motor Market logo"
               width={140}
               height={140}
-              className="h-20 w-auto"
+              className="h-16 sm:h-20 w-auto"
             />
           </div>
-          <div className="space-y-5 text-sm leading-relaxed text-brand-dark">
-            <p className="font-serif text-2xl text-brand-dark">
+          <div className="space-y-4 sm:space-y-5 text-sm leading-relaxed text-brand-dark">
+            <p className="font-serif text-xl sm:text-2xl text-brand-dark">
               From the founders of the revered classic European car club, Fuelfed, comes a new platform allowing you to
               take control of the sales experience.
             </p>
@@ -157,46 +157,46 @@ export default async function Home() {
         </SiteContainer>
       </section>
 
-      <section className="bg-page-alt py-16 text-center">
-        <SiteContainer className="space-y-6">
-          <p className="font-serif text-xs uppercase tracking-[0.5em] text-brand-dark">
+      <section className="bg-page-alt py-12 sm:py-16 text-center">
+        <SiteContainer className="space-y-5 sm:space-y-6">
+          <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] sm:tracking-[0.5em] text-brand-dark">
             Membership · $49 yearly
           </p>
-          <h3 className="font-serif text-3xl text-brand-dark">
+          <h3 className="font-serif text-2xl sm:text-3xl text-brand-dark px-4">
             Serious conversations only. A single annual due keeps the tire-kickers away.
           </h3>
-          <div className="grid gap-4 text-xs uppercase tracking-[0.35em] text-brand-dark/80 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-brand-dark/80 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {membershipBenefits.map((benefit) => (
-              <div key={benefit} className="border border-border-soft bg-card px-4 py-6">
+              <div key={benefit} className="border border-border-soft bg-card px-4 py-5 sm:py-6">
                 {benefit}
               </div>
             ))}
           </div>
-          <Button asChild variant="secondary">
+          <Button asChild variant="secondary" className="w-full sm:w-auto h-11 sm:h-12">
             <Link href="/register">Become a Member</Link>
           </Button>
         </SiteContainer>
       </section>
 
-      <section className="bg-page py-20">
+      <section className="bg-page py-12 sm:py-16 md:py-20">
         <SiteContainer>
-          <div className="flex flex-col gap-4 border-b border-border-soft pb-8 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
+          <div className="flex flex-col gap-4 border-b border-border-soft pb-6 sm:pb-8 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
             <div className="space-y-2">
-              <p className="font-serif text-xs uppercase tracking-[0.5em] text-brand-dark">
+              <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] sm:tracking-[0.5em] text-brand-dark">
                 Member Listings
               </p>
-              <h4 className="font-serif text-3xl text-brand-dark">
+              <h4 className="font-serif text-2xl sm:text-3xl text-brand-dark px-2 sm:px-0">
                 Hand-picked vehicles presently inside the showroom
               </h4>
-              <p className="text-sm uppercase tracking-[0.35em] text-text-muted">
+              <p className="text-xs sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">
                 One-column on mobile, three on desktop. No clutter, just cars.
               </p>
             </div>
-            <Button variant="ghost" asChild>
+            <Button variant="ghost" asChild className="w-full sm:w-auto">
               <Link href="/listings">View the catalogue</Link>
             </Button>
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-6 sm:mt-8 md:mt-10 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {displayListings.length > 0 ? (
               displayListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
             ) : (

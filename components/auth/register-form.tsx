@@ -78,7 +78,7 @@ export function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
         <FormField
           control={form.control}
           name="name"
@@ -148,12 +148,12 @@ export function RegisterForm() {
           control={form.control}
           name="termsAccepted"
           render={({ field }) => (
-            <FormItem className="flex items-start space-x-3 rounded-md border p-4">
+            <FormItem className="flex items-start space-x-3 rounded-md border p-3 sm:p-4">
               <FormControl>
-                <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={isPending} />
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={isPending} className="mt-0.5" />
               </FormControl>
-              <div className="space-y-1 text-sm">
-                <FormLabel>
+              <div className="space-y-1 text-xs sm:text-sm leading-relaxed">
+                <FormLabel className="cursor-pointer">
                   I agree to the <a href="/terms" className="underline">Terms of Service</a> and <a href="/privacy" className="underline">Privacy Policy</a>.
                 </FormLabel>
                 <FormMessage />
@@ -165,13 +165,13 @@ export function RegisterForm() {
           control={form.control}
           name="membershipPaymentConfirmed"
           render={({ field }) => (
-            <FormItem className="flex items-start space-x-3 rounded-md border p-4 bg-muted/30">
+            <FormItem className="flex items-start space-x-3 rounded-md border p-3 sm:p-4 bg-muted/30">
               <FormControl>
-                <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={isPending} />
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} disabled={isPending} className="mt-0.5" />
               </FormControl>
-              <div className="space-y-1 text-sm">
-                <FormLabel>I confirm the membership payment has been collected (temporary manual step).</FormLabel>
-                <p className="text-muted-foreground text-xs">
+              <div className="space-y-1 text-xs sm:text-sm leading-relaxed">
+                <FormLabel className="cursor-pointer">I confirm the membership payment has been collected (temporary manual step).</FormLabel>
+                <p className="text-muted-foreground text-[0.7rem] sm:text-xs">
                   This will mark the member as paid until Stripe Checkout is in place.
                 </p>
                 <FormMessage />
@@ -179,9 +179,9 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
-        {error && <div className="text-red-500 text-sm">{error}</div>}
-        {success && <div className="text-green-500 text-sm">{success}</div>}
-        <Button type="submit" className="w-full" disabled={isPending}>
+        {error && <div className="text-red-500 text-sm px-1">{error}</div>}
+        {success && <div className="text-green-500 text-sm px-1">{success}</div>}
+        <Button type="submit" className="w-full h-11 sm:h-12 text-sm sm:text-base" disabled={isPending}>
           {isPending ? "Creating Account..." : "Create Account"}
         </Button>
       </form>

@@ -54,19 +54,19 @@ export async function Header() {
   return (
     <header className="border-b border-border-strong bg-page/95">
       <div className="bg-brand-dark text-white">
-        <SiteContainer className="py-2 text-center text-[0.68rem] font-semibold uppercase tracking-[0.4em]">
-          FUELFED CLASSIC MOTOR MARKET POP-UP: MAY 15, 2026 / AT 2028 LEIGH
-          NORTHBROOK / 9:00 TO 11:00AM
+        <SiteContainer className="py-2 text-center text-[0.6rem] sm:text-[0.68rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] px-4">
+          <span className="hidden sm:inline">FUELFED CLASSIC MOTOR MARKET POP-UP: MAY 15, 2026 / AT 2028 LEIGH NORTHBROOK / 9:00 TO 11:00AM</span>
+          <span className="sm:hidden">FUELFED POP-UP: MAY 15, 2026</span>
         </SiteContainer>
       </div>
-      <SiteContainer bleed className="py-4 max-w-none px-4 md:px-6">
-        <div className="flex items-center justify-between gap-6">
-          <div className="flex items-center gap-3 sm:gap-4">
+      <SiteContainer bleed className="py-3 sm:py-4 max-w-none px-4 md:px-6">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-8 w-8 shrink-0 rounded-full p-0 text-brand-dark transition hover:bg-brand-dark/5 hover:text-brand-gold focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="h-9 w-9 sm:h-8 sm:w-8 shrink-0 rounded-full p-0 text-brand-dark transition hover:bg-brand-dark/5 hover:text-brand-gold focus-visible:ring-0 focus-visible:ring-offset-0"
                   aria-label="Open quick links"
                 >
                   <Menu className="h-4 w-4" />
@@ -100,7 +100,7 @@ export async function Header() {
 
             <Link
               href="/"
-              className="flex items-center gap-3 text-brand-dark"
+              className="flex items-center gap-2 sm:gap-3 text-brand-dark min-w-0 flex-shrink"
               aria-label="Classic Motor Market home"
             >
               <Image
@@ -108,30 +108,34 @@ export async function Header() {
                 alt="Classic Motor Market logo"
                 width={160}
                 height={40}
-                className="h-10 w-auto"
+                className="h-8 sm:h-10 w-auto flex-shrink-0"
                 priority
               />
-              <span className="font-serif text-sm uppercase tracking-[0.3em] sm:text-base sm:tracking-[0.45em] whitespace-nowrap">
+              <span className="font-serif text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] sm:tracking-[0.3em] md:tracking-[0.45em] whitespace-nowrap hidden sm:inline">
                 Classic Motor Market
               </span>
             </Link>
           </div>
 
-          <nav className="flex items-center justify-end gap-3 sm:gap-4">
+          <nav className="flex items-center justify-end gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 flex-shrink-0">
             <Link
               href={authLink.href}
-              className="text-xs font-semibold uppercase tracking-[0.35em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap"
+              className="text-[0.65rem] sm:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.35em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden sm:inline-block"
             >
               {authLink.label}
             </Link>
-            {ctaLinks.map((cta) => (
+            {ctaLinks.map((cta, index) => (
               <Button
                 key={cta.href}
                 asChild
                 variant={cta.variant ?? "default"}
-                className="uppercase tracking-[0.35em]"
+                size={index === 0 ? "default" : "sm"}
+                className="uppercase tracking-[0.25em] sm:tracking-[0.35em] text-[0.65rem] sm:text-sm px-2 sm:px-4 h-8 sm:h-9 md:h-10"
               >
-                <Link href={cta.href}>{cta.label}</Link>
+                <Link href={cta.href}>
+                  <span className="hidden sm:inline">{cta.label}</span>
+                  <span className="sm:hidden">{index === 0 ? (isAuthed ? "List" : "Join") : "Browse"}</span>
+                </Link>
               </Button>
             ))}
           </nav>
