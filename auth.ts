@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
+import { Adapter } from "@auth/core/adapters"
 import { prisma } from "@/lib/prisma"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
@@ -9,7 +10,8 @@ import { authConfig } from "./auth.config"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(prisma),
+  // Cast to the core Adapter type to avoid duplicate @auth/core versions in type resolution
+  adapter: PrismaAdapter(prisma) as Adapter,
   session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, user }) {
