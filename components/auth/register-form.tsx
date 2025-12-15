@@ -28,11 +28,11 @@ const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
-  termsAccepted: z.literal(true, {
-    errorMap: () => ({ message: "You must accept the Terms of Service and Privacy Policy." }),
+  termsAccepted: z.boolean().refine((val) => val === true, {
+    message: "You must accept the Terms of Service and Privacy Policy.",
   }),
-  membershipPaymentConfirmed: z.literal(true, {
-    errorMap: () => ({ message: "Confirm you've collected payment to create the account." }),
+  membershipPaymentConfirmed: z.boolean().refine((val) => val === true, {
+    message: "Confirm you've collected payment to create the account.",
   }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
@@ -51,7 +51,6 @@ export function RegisterForm() {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
-      name: "",
       username: "",
       email: "",
       password: "",
@@ -65,21 +64,15 @@ export function RegisterForm() {
     setError("")
     setSuccess("")
     
-    startTransition(() => {
-      registerAction(values)
-        .then((data) => {
-          if (data.error) {
-            setError(data.error)
-          }
-          if (data && data.success) {
-            setSuccess(data.success)
-            // Redirect handled by server action
-          }
-        })
-        .catch(() => {
-            // Catching redirect errors or other issues if they bubble up strangely
-            // usually redirect just works
-        })
+    startTransition(async () => {
+      const data = await registerAction(values)
+      if (data.error) {
+        setError(data.error)
+      }
+      if (data && data.success) {
+        setSuccess(data.success)
+        // Redirect handled by server action
+      }
     })
   }
 

@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { toast } from "sonner" // Assuming sonner or use basic alert
 
 export function UpgradeButton() {
   const [isLoading, setIsLoading] = useState(false)

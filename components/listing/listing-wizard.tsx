@@ -175,26 +175,27 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
       return
     }
 
-    startTransition(() => {
+    startTransition(async () => {
       const values = form.getValues()
       const normalizedImages = (values.images || []).map(normalizeImageId)
-      createListing(
-        { 
-          ...values, 
-          images: normalizedImages,
-          id: (initialData as any)?.id 
-        }, 
-        intent
-      )
-        .then((result) => {
-          if (result?.error) {
-            setFormError(result.error)
-            return
-          }
-          const redirectPath = result?.redirectPath ?? "/account/listings"
-          router.push(redirectPath)
-        })
-        .catch(() => setFormError("Something went wrong while saving your listing."))
+      try {
+        const result = await createListing(
+          {
+            ...values,
+            images: normalizedImages,
+            id: (initialData as any)?.id
+          },
+          intent
+        )
+        if (result?.error) {
+          setFormError(result.error)
+          return
+        }
+        const redirectPath = result?.redirectPath ?? "/account/listings"
+        router.push(redirectPath)
+      } catch {
+        setFormError("Something went wrong while saving your listing.")
+      }
     })
   }
 

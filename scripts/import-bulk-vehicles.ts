@@ -69,7 +69,7 @@ function getImagesToken(): string | undefined {
 }
 
 function ensureEnv() {
-  const missing = REQUIRED_ENVS.filter((key) => !process.env[key]);
+  const missing: string[] = REQUIRED_ENVS.filter((key) => !process.env[key]);
   if (!getImagesToken()) missing.push('CLOUDFLARE_IMAGES_TOKEN or CLOUDFLARE_API_TOKEN');
   if (missing.length) {
     throw new Error(`Missing required env vars: ${missing.join(', ')}`);
@@ -92,7 +92,7 @@ function normalizeInt(value?: string): number | undefined {
 
 function normalizePriceDollars(value?: string): number | undefined {
   const n = normalizeInt(value);
-  if (!Number.isFinite(n)) return undefined;
+  if (n === undefined || !Number.isFinite(n)) return undefined;
   return Math.round(n);
 }
 
@@ -176,13 +176,22 @@ function parseVehicles(raw: string): ParsedVehicle[] {
     }
 
     // Normalize text fields after concatenation
-    ['optionsAndFeatures', 'modifications', 'vehicleHistory', 'maintenanceHistory'].forEach((k) => {
-      const key = k as keyof ParsedVehicle;
-      const val = vehicle[key];
-      if (typeof val === 'string') {
-        vehicle[key] = normalizeText(val);
-      }
-    });
+    if (vehicle.optionsAndFeatures) {
+      const normalized = normalizeText(vehicle.optionsAndFeatures);
+      if (normalized !== undefined) vehicle.optionsAndFeatures = normalized;
+    }
+    if (vehicle.modifications) {
+      const normalized = normalizeText(vehicle.modifications);
+      if (normalized !== undefined) vehicle.modifications = normalized;
+    }
+    if (vehicle.vehicleHistory) {
+      const normalized = normalizeText(vehicle.vehicleHistory);
+      if (normalized !== undefined) vehicle.vehicleHistory = normalized;
+    }
+    if (vehicle.maintenanceHistory) {
+      const normalized = normalizeText(vehicle.maintenanceHistory);
+      if (normalized !== undefined) vehicle.maintenanceHistory = normalized;
+    }
 
     return vehicle;
   });

@@ -14,7 +14,9 @@ export function FeaturedToggle({ id, isFeatured }: { id: number, isFeatured: boo
       variant="ghost" 
       size="icon" 
       disabled={isPending}
-      onClick={() => startTransition(() => toggleFeatured(id))}
+      onClick={() => startTransition(async () => {
+        await toggleFeatured(id)
+      })}
       title={isFeatured ? "Remove from Featured" : "Add to Featured"}
     >
       <Star 
