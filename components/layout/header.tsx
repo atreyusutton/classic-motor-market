@@ -22,23 +22,34 @@ type CtaLink = NavLink & {
 
 export async function Header() {
   const session = await auth()
+  const isAuthed = Boolean(session?.user)
 
   const menuLinks: NavLink[] = [
+    { label: "Browse Vehicles", href: "/listings" },
     { label: "List a Vehicle", href: "/sell" },
+    { label: "Become a Member", href: "/register" },
     { label: "Contact", href: "/contact" },
+    isAuthed
+      ? { label: session?.user?.name ?? session?.user?.email ?? "Account", href: "/account" }
+      : { label: "Log In", href: "/login" },
   ]
 
-  const authLink: NavLink = session?.user
+  const authLink: NavLink = isAuthed
     ? {
-        label: session.user.name ?? session.user.email ?? "Account",
+        label: session?.user?.name ?? session?.user?.email ?? "Account",
         href: "/account",
       }
     : { label: "Log In", href: "/login" }
 
-  const ctaLinks: CtaLink[] = [
-    { label: "Become a Member", href: "/register" },
-    { label: "Browse Vehicles", href: "/listings", variant: "outline" },
-  ]
+  const ctaLinks: CtaLink[] = isAuthed
+    ? [
+        { label: "List Vehicle", href: "/sell", variant: "default" }, // brand blue/primary
+        { label: "Browse Vehicles", href: "/listings", variant: "outline" }, // outline (previous style)
+      ]
+    : [
+        { label: "Become a Member", href: "/register", variant: "default" }, // brand blue/primary
+        { label: "Browse Vehicles", href: "/listings", variant: "outline" }, // outline (previous style)
+      ]
 
   return (
     <header className="border-b border-border-strong bg-page/95">

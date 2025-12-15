@@ -2,12 +2,14 @@
 
 "use client"
 
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal, Trash2, CheckCircle, DollarSign } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { updateListingStatus, deleteListing, updatePublishFeeStatus } from "@/app/actions/listing"
@@ -58,22 +60,31 @@ export function ListingActions({ listingId, status, publishFeePaid }: ListingAct
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent
+        align="end"
+        className="w-56 bg-white text-foreground border border-border shadow-lg"
+      >
+        <DropdownMenuItem asChild>
+          <Link href={`/sell/${listingId}`}>
+            Edit Listing
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         {status !== 'active' && (
           <DropdownMenuItem onClick={() => onUpdateStatus('active')}>
-            <CheckCircle className="mr-2 h-4 w-4" /> Mark Active
+            Mark Active
           </DropdownMenuItem>
         )}
         {status !== 'sold' && (
           <DropdownMenuItem onClick={() => onUpdateStatus('sold')}>
-            <CheckCircle className="mr-2 h-4 w-4" /> Mark Sold
+            Mark Sold
           </DropdownMenuItem>
         )}
         <DropdownMenuItem onClick={() => onTogglePublishFee(!publishFeePaid)}>
-          <DollarSign className="mr-2 h-4 w-4" /> {publishFeePaid ? "Mark Publish Fee Unpaid" : "Confirm Publish Fee Paid"}
+          {publishFeePaid ? "Mark Publish Fee Unpaid" : "Confirm Publish Fee Paid"}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onDelete} className="text-red-600 focus:text-red-600 focus:bg-red-50">
-          <Trash2 className="mr-2 h-4 w-4" /> Delete
+          Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

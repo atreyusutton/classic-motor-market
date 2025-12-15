@@ -2,7 +2,22 @@
 
 import { useState, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
-import { X, Upload, ArrowUp, ArrowDown } from "lucide-react"
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core"
+import {
+  SortableContext,
+  arrayMove,
+  useSortable,
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import { X, Upload, Move } from "lucide-react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -21,6 +36,15 @@ export function ImageUpload({
   maxFiles = 5
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 5 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 100, tolerance: 5 },
+    })
+  )
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     try {
@@ -84,68 +108,37 @@ export function ImageUpload({
     }
   }
 
-  const moveImage = (index: number, direction: "up" | "down") => {
-    const newIndex = direction === "up" ? index - 1 : index + 1
-    if (newIndex < 0 || newIndex >= value.length) return
-    const updated = [...value]
-    const [moved] = updated.splice(index, 1)
-    updated.splice(newIndex, 0, moved)
-    onChange(updated)
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = value.findIndex((url) => url === active.id)
+    const newIndex = value.findIndex((url) => url === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    onChange(arrayMove(value, oldIndex, newIndex))
   }
 
   return (
     <div>
-      <div className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-        {value.map((url, index) => (
-          <div key={url} className="relative aspect-[4/3] group rounded-md overflow-hidden bg-muted border">
-            <div className="absolute top-2 right-2 z-10 flex gap-1">
-              <Button
-                type="button"
-                onClick={() => onRemove(url)}
-                variant="destructive"
-                size="icon"
-                className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-              >
-                <X className="h-3 w-3" />
-              </Button>
-              <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="icon"
-                  className="h-6 w-6 bg-white/90 text-foreground"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    moveImage(index, "up")
-                  }}
-                  disabled={index === 0}
-                >
-                  <ArrowUp className="h-3 w-3" />
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="icon"
-                  className="h-6 w-6 bg-white/90 text-foreground"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    moveImage(index, "down")
-                  }}
-                  disabled={index === value.length - 1}
-                >
-                  <ArrowDown className="h-3 w-3" />
-                </Button>
-              </div>
-            </div>
-            <Image
-              fill
-              className="object-cover"
-              alt="Vehicle image"
-              src={url}
-            />
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={value}>
+          <div className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            {value.map((url) => (
+              <SortableThumbnail
+                key={url}
+                id={url}
+                url={url}
+                onRemove={onRemove}
+              />
+            ))}
           </div>
-        ))}
-      </div>
+        </SortableContext>
+      </DndContext>
       
       {value.length < maxFiles && (
         <div
@@ -174,6 +167,57 @@ export function ImageUpload({
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function SortableThumbnail({ id, url, onRemove }: { id: string; url: string; onRemove: (url: string) => void }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={cn(
+        "relative aspect-[4/3] group rounded-md overflow-hidden bg-muted border",
+        isDragging && "z-20 shadow-lg ring-2 ring-primary/50"
+      )}
+    >
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1">
+        <Button
+          type="button"
+          onClick={() => onRemove(url)}
+          variant="destructive"
+          size="icon"
+          onPointerDown={(e) => e.stopPropagation()}
+          className="h-6 w-6 opacity-80 hover:opacity-100 group-hover:opacity-100 transition-opacity shadow-sm group-hover:bg-white group-hover:text-red-600 group-hover:hover:text-red-700"
+        >
+          <X className="h-3 w-3" />
+        </Button>
+      </div>
+      <div className="absolute inset-0 pointer-events-none bg-black/30 opacity-0 group-hover:opacity-80 transition-opacity flex items-center justify-center z-10">
+        <Move className="h-6 w-6 text-white drop-shadow" />
+      </div>
+      <Image
+        fill
+        className="object-cover z-0"
+        alt="Vehicle image"
+        src={url}
+      />
     </div>
   )
 }

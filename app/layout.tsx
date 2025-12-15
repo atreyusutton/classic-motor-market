@@ -22,6 +22,11 @@ const serif = Playfair_Display({
 export const metadata: Metadata = {
   title: "Classic Motor Market",
   description: "The premier destination for buying and selling exceptional vehicles.",
+  icons: {
+    icon: "/assets/cmm-logo-black.png",
+    shortcut: "/assets/cmm-logo-black.png",
+    apple: "/assets/cmm-logo-black.png",
+  },
 };
 
 export default function RootLayout({

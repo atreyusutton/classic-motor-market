@@ -62,7 +62,10 @@ export function UserActions({ userId, currentIsAdmin, currentUserName }: UserAct
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent
+        align="end"
+        className="w-56 bg-white text-foreground border border-border shadow-lg"
+      >
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem onClick={onToggleRole}>
           {currentIsAdmin ? (

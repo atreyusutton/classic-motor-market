@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
 import Image from "next/image"
-import { Edit, Eye } from "lucide-react"
 import { generateListingSlug, formatCurrency, getCloudflareImageUrl } from "@/lib/utils"
 import { ListingActions } from "@/components/listing/listing-actions"
 
@@ -64,7 +63,7 @@ export default async function AccountListingsPage() {
             {listings.map((listing) => (
               <TableRow key={listing.id}>
                 <TableCell>
-                  <div className="relative h-12 w-16 bg-muted rounded overflow-hidden">
+                  <Link href={generateListingSlug(listing as any)} className="group relative block h-12 w-16 rounded overflow-hidden ring-1 ring-border hover:ring-2 hover:ring-primary transition">
                     {listing.media[0] ? (
                       <Image 
                         src={getCloudflareImageUrl(listing.media[0].providerId)} 
@@ -73,12 +72,14 @@ export default async function AccountListingsPage() {
                         className="object-cover" 
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">No Img</div>
+                      <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground bg-muted">No Img</div>
                     )}
-                  </div>
+                  </Link>
                 </TableCell>
                 <TableCell className="font-medium">
-                  {listing.year} {listing.make} {listing.model}
+                  <Link href={generateListingSlug(listing as any)} className="hover:underline">
+                    {listing.year} {listing.make} {listing.model}
+                  </Link>
                 </TableCell>
                 <TableCell>{formatCurrency(listing.askingPrice)}</TableCell>
                 <TableCell>
@@ -92,19 +93,7 @@ export default async function AccountListingsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex justify-end gap-2 items-center">
-                    <Button variant="ghost" size="icon" asChild>
-                      <Link href={generateListingSlug(listing as any)}>
-                        <Eye className="h-4 w-4" />
-                      </Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" disabled={false} asChild>
-                        <Link href={`/sell/${listing.id}`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                    </Button>
-                    <ListingActions listingId={listing.id} status={listing.listingStatus} publishFeePaid={listing.publishFeePaid} />
-                  </div>
+                  <ListingActions listingId={listing.id} status={listing.listingStatus} publishFeePaid={listing.publishFeePaid} />
                 </TableCell>
               </TableRow>
             ))}

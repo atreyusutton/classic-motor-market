@@ -108,38 +108,11 @@ const SAMPLE_DATA: ListingFormValues = {
   engine: "3.6L Flat-6",
   transmission: "5-Speed Manual",
   askingPrice: 275000,
-  optionsAndFeatures: `• Original factory specification
-• Lightweight bucket seats
-• Aluminum hood and doors
-• Adjustable rear spoiler
-• Limited slip differential
-• Sport suspension
-• Original Fuchs wheels
-• Period-correct radio delete`,
+  optionsAndFeatures: `Original factory specification with lightweight bucket seats, aluminum hood and doors, adjustable rear spoiler, limited slip differential, sport suspension, original Fuchs wheels, and a period-correct radio delete. Everything presents as-delivered with no aftermarket add-ons.`,
   modifications: "All original factory RS specification. No modifications from original build. Matching numbers throughout. Original paint and interior.",
   conditionGrade: "show_car" as const,
-  vehicleHistory: `This exceptional 1993 Porsche 911 Carrera RS is one of only 2,282 examples produced. Originally delivered to Germany, this car was imported to the United States in 2005 and has been part of a private collection ever since.
-
-The car has been meticulously maintained with regular service at authorized Porsche specialists. Complete service history is documented from new. The car shows beautifully with its original Maritime Blue paint in excellent condition.
-
-Ownership history:
-- Original owner (Germany): 1993-2005
-- Second owner (California): 2005-2018
-- Current owner: 2018-present
-
-The car has never been tracked or raced and has been stored in a climate-controlled environment throughout its life.`,
-  maintenanceHistory: `Comprehensive service history from new including:
-
-Recent major service (2024):
-- Complete engine inspection
-- Timing chain service
-- Brake system overhaul
-- Suspension refresh
-- New Michelin Pilot Sport tires
-
-All service performed by Porsche specialists with complete documentation. Recent pre-purchase inspection available. All fluids recently changed, new battery installed.
-
-The car is mechanically excellent and ready to drive or show.`,
+  vehicleHistory: `This 1993 Porsche 911 Carrera RS is one of 2,282 produced. Delivered new in Germany, it was imported to the United States in 2005 and has remained in private collections since. The car retains its original Maritime Blue paint in excellent condition and has been climate-controlled stored. Documented ownership spans the original German owner (1993-2005), a California collector (2005-2018), and the current caretaker from 2018 to present.`,
+  maintenanceHistory: `Comprehensive service history from new with regular visits to authorized Porsche specialists. A recent 2024 major service included a full engine inspection, timing-chain service, brake overhaul, suspension refresh, and new Michelin Pilot Sport tires. All fluids were replaced and a new battery installed. Documentation for all work is available, and the car is ready to drive or show.`,
   titleStatus: "clean",
   carfaxAvailable: true,
   images: [],
@@ -494,7 +467,7 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
                     </div>
                   )}
 
-                  <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-6">
                     <div className="rounded-lg border p-4">
                       <h3 className="font-semibold mb-3 border-b pb-2">Basic Information</h3>
                       <div className="grid grid-cols-2 gap-y-2 text-sm">
@@ -556,6 +529,19 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
                       )}
                     </div>
                   </div>
+
+                  {images.length > 1 && (
+                    <div className="rounded-lg border p-4">
+                      <h3 className="font-semibold mb-3 border-b pb-2">Additional Photos</h3>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {images.slice(1).map((img, idx) => (
+                          <div key={img} className="relative aspect-[4/3] overflow-hidden rounded-md border bg-muted">
+                            <Image src={img} alt={`Photo ${idx + 2}`} fill className="object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <FormField control={form.control} name="publishFeeConfirmed" render={({ field }) => (
                     <FormItem className="flex items-start space-x-3 rounded-md border bg-muted/40 p-4">

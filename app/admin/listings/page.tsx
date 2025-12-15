@@ -4,7 +4,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Eye, Edit } from "lucide-react"
 import { FeaturedToggle } from "@/components/admin/featured-toggle"
 import { ListingActions } from "@/components/listing/listing-actions"
 
@@ -45,8 +44,10 @@ export default async function AdminListingsPage() {
                 <TableRow key={listing.id}>
                   <TableCell className="font-mono text-xs">{listing.id}</TableCell>
                   <TableCell>
-                    <div className="font-medium">{listing.year} {listing.make} {listing.model}</div>
-                    <div className="text-xs text-muted-foreground">{listing.publicId}</div>
+                    <Link href={generateListingSlug(listing as any)} className="block hover:underline">
+                      <div className="font-medium">{listing.year} {listing.make} {listing.model}</div>
+                      <div className="text-xs text-muted-foreground">{listing.publicId}</div>
+                    </Link>
                   </TableCell>
                   <TableCell>{formatCurrency(listing.askingPrice)}</TableCell>
                   <TableCell>
@@ -68,16 +69,6 @@ export default async function AdminListingsPage() {
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2 items-center">
                       <FeaturedToggle id={listing.id} isFeatured={listing.featured} />
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link href={generateListingSlug(listing as any)}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link href={`/sell/${listing.id}`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
                       <ListingActions listingId={listing.id} status={listing.listingStatus} publishFeePaid={listing.publishFeePaid} />
                     </div>
                   </TableCell>
