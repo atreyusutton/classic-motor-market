@@ -16,11 +16,11 @@ const registerSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
-  termsAccepted: z.literal(true, {
-    errorMap: () => ({ message: "You must accept the Terms of Service and Privacy Policy." }),
+  termsAccepted: z.boolean().refine((val) => val === true, {
+    message: "You must accept the Terms of Service and Privacy Policy.",
   }),
-  membershipPaymentConfirmed: z.literal(true, {
-    errorMap: () => ({ message: "Confirm membership payment before creating an account." }),
+  membershipPaymentConfirmed: z.boolean().refine((val) => val === true, {
+    message: "Confirm membership payment before creating an account.",
   }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
