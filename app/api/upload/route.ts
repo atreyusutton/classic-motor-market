@@ -88,15 +88,21 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { url } = await request.json();
+  const { url, id } = await request.json() as { url?: string; id?: string };
   
-  // Extract Cloudflare Image ID from URL
-  // URL format: https://imagedelivery.net/<account_hash>/<image_id>/<variant>
-  const parts = url.split('/');
-  const imageId = parts[parts.length - 2]; 
+  // Extract Cloudflare Image ID from URL if provided, otherwise use explicit id
+  let imageId = id;
+  if (!imageId && url) {
+    try {
+      const parts = url.split('/');
+      imageId = parts[parts.length - 2];
+    } catch (e) {
+      imageId = undefined;
+    }
+  }
 
   if (!imageId) {
-      return NextResponse.json({ error: "Invalid image URL" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid image reference" }, { status: 400 });
   }
 
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;

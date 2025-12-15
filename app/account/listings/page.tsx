@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Link from "next/link"
 import Image from "next/image"
 import { generateListingSlug, formatCurrency, getCloudflareImageUrl } from "@/lib/utils"
+import { CarFront } from "lucide-react"
 import { ListingActions } from "@/components/listing/listing-actions"
 
 export default async function AccountListingsPage() {
@@ -72,7 +73,9 @@ export default async function AccountListingsPage() {
                         className="object-cover" 
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground bg-muted">No Img</div>
+                      <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground bg-muted">
+                        <CarFront className="h-5 w-5" />
+                      </div>
                     )}
                   </Link>
                 </TableCell>

@@ -70,6 +70,10 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   const savedListingCount = currentUserId ? (((listing as any).savedListings?.length) ?? 0) : 0
   const isSaved = savedListingCount > 0
   const price = formatCurrency(listing.askingPrice)
+  const isOwner = currentUserId === listing.sellerId
+  const isLoggedIn = Boolean(currentUserId)
+  const membershipStatus = session?.user?.membershipStatus
+  const isMember = membershipStatus === "member"
   const sellerDisplayName = listing.seller.username || listing.seller.name?.split(" ")[0] || "seller"
   const conditionLabel = listing.conditionGrade ? CONDITION_LABELS[listing.conditionGrade as keyof typeof CONDITION_LABELS] : undefined
   const canViewIdentifier = Boolean(session?.user)
@@ -163,11 +167,25 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               <p className="font-serif text-3xl text-brand-dark">{price}</p>
             </div>
             <div className="space-y-3">
-              <ContactSellerDialog
-                listingId={listing.id}
-                listingTitle={`${listing.year} ${listing.make} ${listing.model}`}
-                sellerName={sellerDisplayName}
-              />
+              {isOwner ? (
+                <Button className="w-full text-lg h-12" size="lg" asChild>
+                  <Link href="/account/listings">View My Listings</Link>
+                </Button>
+              ) : !isLoggedIn ? (
+                <Button className="w-full text-lg h-12" size="lg" asChild>
+                  <Link href="/login">Contact Seller</Link>
+                </Button>
+              ) : !isMember ? (
+                <Button className="w-full text-lg h-12" size="lg" asChild>
+                  <Link href="/account/billing">Contact Seller</Link>
+                </Button>
+              ) : (
+                <ContactSellerDialog
+                  listingId={listing.id}
+                  listingTitle={`${listing.year} ${listing.make} ${listing.model}`}
+                  sellerName={sellerDisplayName}
+                />
+              )}
               <WatchlistButton listingId={listing.id} initialSaved={isSaved} />
               <ShareButton title={`${listing.year} ${listing.make} ${listing.model}`} />
               <ReportButton listingId={listing.id} />

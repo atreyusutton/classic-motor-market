@@ -20,7 +20,7 @@ import { CSS } from "@dnd-kit/utilities"
 import { X, Upload, Move } from "lucide-react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { cn, getCloudflareImageUrl } from "@/lib/utils"
 
 interface ImageUploadProps {
   value: string[]
@@ -65,7 +65,7 @@ export function ImageUpload({
         }
 
         const data = await response.json()
-        newUrls.push(data.url)
+        newUrls.push(data.id || data.url)
       }
 
       onChange([...value, ...newUrls])
@@ -88,15 +88,15 @@ export function ImageUpload({
     maxFiles: maxFiles - value.length
   })
 
-  const onRemove = async (url: string) => {
+  const onRemove = async (providerId: string) => {
     try {
       // Optimistically remove from UI first
-      onChange(value.filter((current) => current !== url))
+      onChange(value.filter((current) => current !== providerId))
 
       // Call API to delete from Cloudflare
       await fetch("/api/upload", {
         method: "DELETE",
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ id: providerId }),
         headers: {
           'Content-Type': 'application/json'
         }
@@ -185,6 +185,7 @@ function SortableThumbnail({ id, url, onRemove }: { id: string; url: string; onR
     transform: CSS.Transform.toString(transform),
     transition,
   }
+  const displayUrl = getCloudflareImageUrl(url)
 
   return (
     <div
@@ -216,7 +217,7 @@ function SortableThumbnail({ id, url, onRemove }: { id: string; url: string; onR
         fill
         className="object-cover z-0"
         alt="Vehicle image"
-        src={url}
+        src={displayUrl}
       />
     </div>
   )

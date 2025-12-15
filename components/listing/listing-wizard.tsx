@@ -16,7 +16,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { ImageUpload } from "@/components/ui/image-upload"
-import { cn } from "@/lib/utils"
+import { cn, getCloudflareImageUrl } from "@/lib/utils"
 
 type ListingFormValues = z.infer<typeof listingSchema>
 type ListingIntent = "draft" | "publish"
@@ -46,7 +46,7 @@ const STEP_VALIDATION_MAP: Record<number, (keyof ListingFormValues)[]> = {
 
 function buildDefaultValues(initialData?: Partial<ListingFormValues> & { id?: number; askingPrice?: number | null; images?: string[]; publishFeePaid?: boolean }) {
   const baseDefaults = {
-    year: new Date().getFullYear(),
+    year: undefined as unknown as number,
     make: "",
     model: "",
     vehicleIdentifier: "",
@@ -83,7 +83,7 @@ function buildDefaultValues(initialData?: Partial<ListingFormValues> & { id?: nu
     interiorColorMaterial: initialData.interiorColorMaterial || "",
     engine: initialData.engine || "",
     transmission: initialData.transmission || "",
-    askingPrice: initialData.askingPrice ? Math.round(initialData.askingPrice / 100) : 0,
+    askingPrice: typeof initialData.askingPrice === 'number' ? initialData.askingPrice : 0,
     optionsAndFeatures: initialData.optionsAndFeatures || "",
     modifications: initialData.modifications || "",
     conditionGrade: (initialData.conditionGrade as ListingFormValues["conditionGrade"]) || "driver",
@@ -152,6 +152,21 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
     }
   }
 
+  const normalizeImageId = (value: string) => {
+    try {
+      const url = new URL(value)
+      if (url.hostname.includes("imagedelivery.net")) {
+        const parts = url.pathname.split("/").filter(Boolean)
+        if (parts.length >= 2) {
+          return parts[1]
+        }
+      }
+    } catch (e) {
+      // not a URL, keep as-is
+    }
+    return value
+  }
+
   const handleAction = async (intent: ListingIntent) => {
     setFormError(null)
     const isValid = await form.trigger()
@@ -161,7 +176,16 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
     }
 
     startTransition(() => {
-      createListing(form.getValues(), intent)
+      const values = form.getValues()
+      const normalizedImages = (values.images || []).map(normalizeImageId)
+      createListing(
+        { 
+          ...values, 
+          images: normalizedImages,
+          id: (initialData as any)?.id 
+        }, 
+        intent
+      )
         .then((result) => {
           if (result?.error) {
             setFormError(result.error)
@@ -232,8 +256,8 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
                           placeholder="1990" 
                           className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                           {...field}
-                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}
-                          value={field.value || ''}
+                          onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
+                          value={field.value ?? ''}
                         />
                       </FormControl>
                     </FormItem>
@@ -463,7 +487,7 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
                 <div className="space-y-6">
                   {images.length > 0 && (
                     <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-                      <Image src={images[0]} alt="Hero Image" fill className="object-cover" />
+                      <Image src={getCloudflareImageUrl(images[0])} alt="Hero Image" fill className="object-cover" />
                     </div>
                   )}
 
@@ -536,7 +560,7 @@ export function ListingWizard({ initialData }: { initialData?: ListingFormValues
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                         {images.slice(1).map((img, idx) => (
                           <div key={img} className="relative aspect-[4/3] overflow-hidden rounded-md border bg-muted">
-                            <Image src={img} alt={`Photo ${idx + 2}`} fill className="object-cover" />
+                            <Image src={getCloudflareImageUrl(img)} alt={`Photo ${idx + 2}`} fill className="object-cover" />
                           </div>
                         ))}
                       </div>

@@ -36,7 +36,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
 
   const initialData: z.infer<typeof listingSchema> & { id: number; publishFeePaid?: boolean } = {
     id: listing.id,
-    year: listing.year ?? new Date().getFullYear(),
+    year: listing.year ?? (undefined as any),
     make: listing.make ?? "",
     model: listing.model ?? "",
     vehicleIdentifier: listing.vehicleIdentifier ?? "",

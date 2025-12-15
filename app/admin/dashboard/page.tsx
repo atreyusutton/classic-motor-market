@@ -57,8 +57,8 @@ export default async function AdminDashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-         <CleanupButton />
+      <div className="grid gap-4">
+        <CleanupButton />
       </div>
     </div>
   )

@@ -21,7 +21,9 @@ interface CFListResponse {
   messages: any[]
 }
 
-export async function cleanupOrphanedImages() {
+type CleanupMode = "scan" | "delete"
+
+export async function cleanupOrphanedImages(mode: CleanupMode = "delete") {
   const session = await auth()
   
   // 1. Verify Admin Access
@@ -30,10 +32,11 @@ export async function cleanupOrphanedImages() {
   }
 
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID
-  const token = process.env.CLOUDFLARE_API_TOKEN
+  // Prefer the dedicated Images token but fall back to the broader API token
+  const token = process.env.CLOUDFLARE_IMAGES_TOKEN || process.env.CLOUDFLARE_API_TOKEN
 
   if (!accountId || !token) {
-    return { error: "Cloudflare credentials missing" }
+    return { error: "Cloudflare credentials missing (need CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_IMAGES_TOKEN or CLOUDFLARE_API_TOKEN)" }
   }
 
   try {
@@ -46,10 +49,14 @@ export async function cleanupOrphanedImages() {
     // Extract just the IDs from the DB URLs
     // Cloudflare URLs format: https://imagedelivery.net/<hash>/<id>/<variant>
     const dbImageIds = new Set(
-      dbMedia.map(m => {
-        const parts = m.providerId.split('/')
-        return parts.length >= 2 ? parts[parts.length - 2] : null
-      }).filter(Boolean)
+      dbMedia
+        .map((m) => {
+          const parts = m.providerId.split('/')
+          // If stored as full URL use the penultimate segment, otherwise the raw id
+          if (parts.length >= 2) return parts[parts.length - 2]
+          return parts[0] ?? null
+        })
+        .filter(Boolean)
     )
 
     console.log(`Found ${dbImageIds.size} images in database.`)
@@ -103,6 +110,26 @@ export async function cleanupOrphanedImages() {
 
     console.log(`Found ${orphans.length} orphaned images to delete.`)
 
+    if (mode === "scan") {
+      return {
+        success: true,
+        mode,
+        stats: {
+          dbImages: dbImageIds.size,
+          cfImages: allCfImages.length,
+          orphansFound: orphans.length,
+          deleted: 0,
+          failed: 0
+        },
+        sampleOrphanIds: orphans.slice(0, 20).map(o => o.id)
+      }
+    }
+
+    // If DB has no images, abort a destructive delete to avoid wiping CF
+    if (dbImageIds.size === 0) {
+      return { error: "No database images found; aborting delete for safety. Run scan to confirm state." }
+    }
+
     // 5. Delete Orphans
     let deletedCount = 0
     const errors = []
@@ -131,6 +158,7 @@ export async function cleanupOrphanedImages() {
 
     return { 
         success: true, 
+        mode,
         stats: {
             dbImages: dbImageIds.size,
             cfImages: allCfImages.length,

@@ -35,6 +35,9 @@ export function formatCurrency(amount?: number | null, currency: string = "USD")
  * @returns Full Cloudflare image URL
  */
 export function getCloudflareImageUrl(imageId: string, variant: string = 'public'): string {
+  if (imageId.startsWith("http://") || imageId.startsWith("https://")) {
+    return imageId
+  }
   const accountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || process.env.CLOUDFLARE_ACCOUNT_HASH
   
   if (!accountHash) {
