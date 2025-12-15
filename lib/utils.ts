@@ -15,9 +15,17 @@ export function generateListingSlug(listing: { year: number | null; make: string
   return `/listings/${parts.join('-')}-${listing.publicId}`;
 }
 
-export function formatCurrencyFromCents(amount?: number | null, currency: string = "USD") {
-  if (!amount) return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(0)
-  return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount / 100)
+export function formatCurrency(amount?: number | null, currency: string = "USD") {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+  if (amount === null || amount === undefined) {
+    return formatter.format(0);
+  }
+  return formatter.format(amount);
 }
 
 /**

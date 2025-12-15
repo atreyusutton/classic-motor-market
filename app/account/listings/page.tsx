@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import Link from "next/link"
 import Image from "next/image"
 import { Edit, Eye } from "lucide-react"
-import { generateListingSlug, formatCurrencyFromCents, getCloudflareImageUrl } from "@/lib/utils"
+import { generateListingSlug, formatCurrency, getCloudflareImageUrl } from "@/lib/utils"
 import { ListingActions } from "@/components/listing/listing-actions"
 
 export default async function AccountListingsPage() {
@@ -80,7 +80,7 @@ export default async function AccountListingsPage() {
                 <TableCell className="font-medium">
                   {listing.year} {listing.make} {listing.model}
                 </TableCell>
-                <TableCell>{formatCurrencyFromCents(listing.askingPrice)}</TableCell>
+                <TableCell>{formatCurrency(listing.askingPrice)}</TableCell>
                 <TableCell>
                   <Badge variant={listing.listingStatus === 'active' ? 'default' : 'secondary'}>
                     {listing.listingStatus}

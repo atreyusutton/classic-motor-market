@@ -13,11 +13,9 @@ export const authConfig = {
         nextUrl.pathname.startsWith('/account') ||
         nextUrl.pathname.startsWith('/sell')
       
-      if (isProtected) {
-        if (isLoggedIn) return true
-        return false // Redirect unauthenticated users to login page
-      }
-      return true
+      if (!isProtected) return true
+      // Only require login at the middleware layer; admin check happens in layouts/pages
+      return isLoggedIn
     },
   },
   providers: [], // Configured in auth.ts

@@ -10,7 +10,7 @@ import { ContactSellerDialog } from "@/components/listing/contact-seller-dialog"
 import { WatchlistButton } from "@/components/listing/watchlist-button"
 import { ShareButton } from "@/components/listing/share-button"
 import { ReportButton } from "@/components/listing/report-button"
-import { formatCurrencyFromCents } from "@/lib/utils"
+import { formatCurrency } from "@/lib/utils"
 import { ListingGallery } from "@/components/listing/listing-gallery"
 import { SiteContainer } from "@/components/layout/site-container"
 import { ListingCard } from "@/components/listing/listing-card"
@@ -25,11 +25,9 @@ const CONDITION_LABELS = {
 
 export default async function VehicleDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params
-  // Extract UUID from slug (last 36 characters after the last hyphen before UUID)
-  // Format: 1979-porsche-930-turbo-4e36fa91-d826-4654-afc9-6f4d28f07247
-  // UUID is always 36 characters (32 hex + 4 hyphens)
   const slug = resolvedParams.slug
-  const publicId = slug.slice(-36) // Extract last 36 characters (the UUID)
+  const uuidMatch = slug.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)
+  const publicId = uuidMatch ? uuidMatch[0] : slug.split('-').pop() || slug
 
   const session = await auth()
   const currentUserId = session?.user?.id ? parseInt(session.user.id) : undefined
@@ -71,7 +69,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   const savedListingCount = currentUserId ? (((listing as any).savedListings?.length) ?? 0) : 0
   const isSaved = savedListingCount > 0
-  const price = formatCurrencyFromCents(listing.askingPrice)
+  const price = formatCurrency(listing.askingPrice)
   const sellerDisplayName = listing.seller.username || listing.seller.name?.split(" ")[0] || "seller"
   const conditionLabel = listing.conditionGrade ? CONDITION_LABELS[listing.conditionGrade as keyof typeof CONDITION_LABELS] : undefined
   const canViewIdentifier = Boolean(session?.user)

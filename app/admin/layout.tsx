@@ -1,4 +1,5 @@
 import { auth } from "@/auth"
+import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -13,7 +14,17 @@ export default async function AdminLayout({
 }) {
   const session = await auth()
 
-  if (!session?.user?.isAdmin) {
+  if (!session?.user?.id) {
+    redirect("/login")
+  }
+
+  // Double-check admin via DB to avoid stale JWT flags
+  const user = await prisma.user.findUnique({
+    where: { id: Number(session.user.id) },
+    select: { isAdmin: true },
+  })
+
+  if (!user?.isAdmin) {
     redirect("/") // Or unauthorized page
   }
 

@@ -8,7 +8,7 @@ import { Eye, Edit } from "lucide-react"
 import { FeaturedToggle } from "@/components/admin/featured-toggle"
 import { ListingActions } from "@/components/listing/listing-actions"
 
-import { generateListingSlug, formatCurrencyFromCents } from "@/lib/utils"
+import { generateListingSlug, formatCurrency } from "@/lib/utils"
 
 export default async function AdminListingsPage() {
   const listings = await prisma.listing.findMany({
@@ -48,7 +48,7 @@ export default async function AdminListingsPage() {
                     <div className="font-medium">{listing.year} {listing.make} {listing.model}</div>
                     <div className="text-xs text-muted-foreground">{listing.publicId}</div>
                   </TableCell>
-                  <TableCell>{formatCurrencyFromCents(listing.askingPrice)}</TableCell>
+                  <TableCell>{formatCurrency(listing.askingPrice)}</TableCell>
                   <TableCell>
                     <div className="flex flex-col">
                       <span>{listing.seller.username ? `@${listing.seller.username}` : listing.seller.name}</span>

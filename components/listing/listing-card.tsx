@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Listing, ListingMedia } from "@prisma/client"
-import { formatCurrencyFromCents, generateListingSlug, getCloudflareImageUrl } from "@/lib/utils"
+import { formatCurrency, generateListingSlug, getCloudflareImageUrl } from "@/lib/utils"
 
 const CONDITION_LABELS: Record<string, string> = {
   show_car: "Show car",
@@ -18,7 +18,7 @@ interface ListingCardProps {
 
 export function ListingCard({ listing }: ListingCardProps) {
   const coverImage = listing.media.find((m) => m.isCover) || listing.media[0]
-  const price = formatCurrencyFromCents(listing.askingPrice)
+  const price = formatCurrency(listing.askingPrice)
   const conditionLabel = listing.conditionGrade ? CONDITION_LABELS[listing.conditionGrade] ?? listing.conditionGrade : "Condition TBD"
 
   return (

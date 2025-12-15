@@ -75,7 +75,7 @@ export async function createListing(rawData: z.infer<typeof listingSchema>, inte
 
   const normalizedListingData = {
     ...listingData,
-    askingPrice: Math.round(listingData.askingPrice * 100),
+    askingPrice: listingData.askingPrice,
     vehicleIdentifier: listingData.vehicleIdentifier?.trim(),
     location: listingData.location?.trim(),
     optionsAndFeatures: listingData.optionsAndFeatures?.trim() || null,

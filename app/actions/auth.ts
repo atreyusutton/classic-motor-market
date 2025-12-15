@@ -73,7 +73,7 @@ export async function registerAction(formData: z.infer<typeof registerSchema>) {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: "/browse",
+      redirectTo: "/",
     })
 
     // This part might not be reached if signIn redirects
@@ -92,7 +92,7 @@ export async function loginAction(prevState: string | undefined, formData: FormD
   try {
     await signIn("credentials", {
       ...Object.fromEntries(formData),
-      redirectTo: "/browse", // Force redirect to browse page
+      redirectTo: "/", // Send to home after login
     })
   } catch (error) {
     if (error instanceof AuthError) {
