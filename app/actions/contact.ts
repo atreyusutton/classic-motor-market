@@ -58,10 +58,10 @@ export async function contactSeller(listingId: number, details: ContactDetails) 
     }
 
     // Send email via Resend
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'Classic Motor Market <onboarding@resend.dev>', // Use verified domain in prod
       to: [listing.seller.email],
-      reply_to: details.email,
+      replyTo: details.email,
       subject: `New inquiry for: ${listing.year} ${listing.make} ${listing.model}`,
       text: `
 Hello ${listing.seller.name},
