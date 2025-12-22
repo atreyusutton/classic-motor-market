@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ListingCard } from "@/components/listing/listing-card"
 import { auth } from "@/auth"
 import { SiteContainer } from "@/components/layout/site-container"
+import { cn, getCloudflareImageUrl, formatCurrency, generateListingSlug } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -20,6 +21,15 @@ const membershipBenefits = [
   "Inspect and test drive on your schedule",
 ]
 
+function SpecRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col gap-1 border-b border-border-soft pb-2 last:border-none last:pb-0">
+      <span className="text-[0.55rem] uppercase tracking-wider text-text-muted">{label}</span>
+      <span className="font-serif text-sm text-brand-dark leading-tight">{value}</span>
+    </div>
+  )
+}
+
 export default async function Home() {
   const session = await auth()
   const isMember = !!session?.user
@@ -33,12 +43,12 @@ export default async function Home() {
       ...visibilityFilter,
     },
     orderBy: { createdAt: "desc" },
-    take: 3,
+    take: 5,
     include: { media: { orderBy: { sortOrder: "asc" } } },
   })
 
   let displayListings = featuredListings
-  if (featuredListings.length < 3) {
+  if (featuredListings.length < 5) {
     const recentListings = await prisma.listing.findMany({
       where: {
         listingStatus: "active",
@@ -47,11 +57,14 @@ export default async function Home() {
         ...visibilityFilter,
       },
       orderBy: { createdAt: "desc" },
-      take: 3 - featuredListings.length,
+      take: 5 - featuredListings.length,
       include: { media: { orderBy: { sortOrder: "asc" } } },
     })
     displayListings = [...featuredListings, ...recentListings]
   }
+
+  const largeListings = displayListings.slice(0, 2)
+  const cardListings = displayListings.slice(2, 5)
 
   return (
     <div className="flex flex-col">
@@ -180,8 +193,8 @@ export default async function Home() {
         </SiteContainer>
       </section>
 
-      <section className="bg-page py-12 sm:py-16 md:py-20">
-        <SiteContainer>
+      <section className="bg-page py-12 sm:py-16 md:py-20 border-t border-border-soft/30">
+        <SiteContainer className="space-y-12 sm:space-y-20">
           <div className="flex flex-col gap-4 border-b border-border-soft pb-6 sm:pb-8 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
             <div className="space-y-2">
               <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] sm:tracking-[0.5em] text-brand-dark">
@@ -198,14 +211,89 @@ export default async function Home() {
               <Link href="/listings">View the catalogue</Link>
             </Button>
           </div>
-          <div className="mt-6 sm:mt-8 md:mt-10 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {displayListings.length > 0 ? (
-              displayListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
-            ) : (
+
+          {/* Large Listings */}
+          <div className="space-y-12 sm:space-y-24">
+            {largeListings.map((listing, index) => {
+              const coverImage = listing.media.find((m) => m.isCover) || listing.media[0]
+              return (
+                <div 
+                  key={listing.id} 
+                  className="bg-card border border-border-soft p-6 sm:p-8 md:p-10 shadow-sm"
+                >
+                  <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-start">
+                    <div className={cn("space-y-8", index % 2 === 1 ? "lg:order-last" : "")}>
+                      <div className="space-y-2">
+                        <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] text-brand-gold font-semibold">Featured Showcase</p>
+                        <Link href={generateListingSlug(listing)}>
+                          <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl text-brand-dark hover:text-brand-gold transition-colors">
+                            {listing.year} {listing.make} {listing.model}
+                          </h3>
+                        </Link>
+                      </div>
+                      
+                      <div className="space-y-6 text-sm sm:text-base text-brand-dark/80 leading-relaxed">
+                        {listing.optionsAndFeatures && (
+                          <p className="line-clamp-4">{listing.optionsAndFeatures}</p>
+                        )}
+                        {listing.vehicleHistory && (
+                          <p className="line-clamp-4">{listing.vehicleHistory}</p>
+                        )}
+                        {listing.maintenanceHistory && (
+                          <p className="line-clamp-4">{listing.maintenanceHistory}</p>
+                        )}
+                        {!listing.optionsAndFeatures && !listing.vehicleHistory && !listing.maintenanceHistory && (
+                          <p>This exceptional {listing.make} represents a unique opportunity for enthusiasts. Presented in remarkable condition with a focus on originality and preservation.</p>
+                        )}
+                      </div>
+
+                      <Button asChild variant="outline" className="w-full sm:w-auto">
+                        <Link href={generateListingSlug(listing)}>View Full Details</Link>
+                      </Button>
+                    </div>
+
+                    <div className="space-y-4">
+                      <Link 
+                        href={generateListingSlug(listing)}
+                        className="relative group block aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-muted border border-border-soft"
+                      >
+                        {coverImage ? (
+                          <Image
+                            src={getCloudflareImageUrl(coverImage.providerId)}
+                            alt={`${listing.year} ${listing.make} ${listing.model}`}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-xs uppercase tracking-[0.35em] text-text-muted">No Imagery</div>
+                        )}
+                      </Link>
+
+                      {/* Specifics Box */}
+                      <div className="grid grid-cols-2 gap-4 border border-border-soft bg-page-alt p-4 sm:p-5">
+                        <SpecRow label="Engine" value={listing.engine || "—"} />
+                        <SpecRow label="Transmission" value={listing.transmission || "—"} />
+                        <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} mi` : "—"} />
+                        <SpecRow label="Color" value={listing.exteriorColor || "—"} />
+                        <SpecRow label="Location" value={listing.location || "Private"} />
+                        <SpecRow label="Price" value={formatCurrency(listing.askingPrice)} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Grid Listings */}
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 pt-12 border-t border-border-soft/30">
+            {cardListings.length > 0 ? (
+              cardListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
+            ) : largeListings.length === 0 ? (
               <div className="col-span-full border border-dashed border-border-strong px-6 py-12 text-center text-sm uppercase tracking-[0.35em] text-text-muted">
                 Listings return shortly. Preparing the next showcase.
               </div>
-            )}
+            ) : null}
           </div>
         </SiteContainer>
       </section>

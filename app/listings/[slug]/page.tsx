@@ -57,15 +57,20 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   if (!listing) notFound()
 
-  const relatedListings = await prisma.listing.findMany({
+  const allOtherListings = await prisma.listing.findMany({
     where: {
       listingStatus: "active",
       id: { not: listing.id },
     },
-    orderBy: { createdAt: "desc" },
-    take: 3,
     include: { media: { orderBy: { sortOrder: "asc" } } },
   })
+
+  // unique and scalable shuffle: Fisher-Yates shuffle
+  const relatedListings = [...allOtherListings];
+  for (let i = relatedListings.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [relatedListings[i], relatedListings[j]] = [relatedListings[j], relatedListings[i]];
+  }
 
   const savedListingCount = currentUserId ? (((listing as any).savedListings?.length) ?? 0) : 0
   const isSaved = savedListingCount > 0
