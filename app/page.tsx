@@ -83,15 +83,15 @@ export default async function Home() {
               Built by car enthusiasts for car enthusiasts.
             </p>
           </div>
-          <div className="flex flex-col gap-3 sm:gap-4 w-full sm:w-auto sm:flex-row">
-            <Button asChild size="lg" className="w-full sm:min-w-[200px] h-11 sm:h-12 text-sm sm:text-base">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto px-2">
+            <Button asChild size="lg" className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px]">
               <Link href="/listings">Browse Listings</Link>
             </Button>
             <Button
               asChild
               variant="outline"
               size="lg"
-              className="w-full sm:min-w-[200px] h-11 sm:h-12 text-sm sm:text-base border-white/70 text-white hover:bg-white/10"
+              className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] border-white/70 text-white hover:bg-white/10"
             >
               <Link href="/sell">List An Automobile</Link>
             </Button>

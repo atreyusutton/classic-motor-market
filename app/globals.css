@@ -51,7 +51,7 @@
   h2,
   h3,
   h4 {
-    @apply font-serif text-brand-dark tracking-[0.08em];
+    @apply font-serif text-brand-dark tracking-[0.08em] scroll-mt-24;
   }
   p {
     @apply leading-relaxed text-text-main;

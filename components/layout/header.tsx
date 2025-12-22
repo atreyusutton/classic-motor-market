@@ -53,21 +53,21 @@ export async function Header() {
 
   return (
     <>
-      <div className="bg-brand-dark text-white">
-        <SiteContainer className="py-2 text-center text-[0.6rem] sm:text-[0.68rem] font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] px-4">
-          <span className="hidden sm:inline">FUELFED CLASSIC MOTOR MARKET POP-UP: MAY 15, 2026 / AT 2028 LEIGH NORTHBROOK / 9:00 TO 11:00AM</span>
-          <span className="sm:hidden">FUELFED POP-UP: MAY 15, 2026</span>
+      <div className="bg-brand-dark text-white overflow-hidden">
+        <SiteContainer className="py-2 text-center text-[0.6rem] min-[800px]:text-[0.68rem] font-semibold uppercase tracking-[0.3em] min-[800px]:tracking-[0.4em] px-4 whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <span className="hidden min-[1080px]:inline">FUELFED CLASSIC MOTOR MARKET POP-UP: MAY 15, 2026 / AT 2028 LEIGH NORTHBROOK / 9:00 TO 11:00AM</span>
+          <span className="min-[1080px]:hidden">FUELFED POP-UP: MAY 15, 2026</span>
         </SiteContainer>
       </div>
       <header className="sticky top-0 left-0 right-0 z-50 border-b border-border-strong bg-white shadow-sm">
-        <SiteContainer bleed className="py-3 sm:py-4 max-w-none px-4 md:px-6">
-        <div className="flex items-center justify-between gap-2 sm:gap-4 md:gap-6">
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
+        <SiteContainer bleed className="py-2 min-[800px]:py-4 max-w-none px-3 sm:px-6">
+        <div className="flex items-center justify-between gap-1.5 sm:gap-4">
+          <div className="flex items-center gap-1.5 sm:gap-4 min-w-0 flex-1">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-9 w-9 sm:h-8 sm:w-8 shrink-0 rounded-full p-0 text-brand-dark transition hover:bg-brand-dark/5 hover:text-brand-gold focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="h-8 w-8 sm:h-8 sm:w-8 shrink-0 rounded-full p-0 text-brand-dark transition hover:bg-brand-dark/5 hover:text-brand-gold focus-visible:ring-0 focus-visible:ring-offset-0"
                   aria-label="Open quick links"
                 >
                   <Menu className="h-4 w-4" />
@@ -101,7 +101,7 @@ export async function Header() {
 
             <Link
               href="/"
-              className="flex items-center gap-2 sm:gap-3 text-brand-dark min-w-0 flex-shrink"
+              className="flex items-center gap-1.5 sm:gap-3 text-brand-dark min-w-0 flex-shrink-0"
               aria-label="Classic Motor Market home"
             >
               <Image
@@ -109,19 +109,19 @@ export async function Header() {
                 alt="Classic Motor Market logo"
                 width={160}
                 height={40}
-                className="h-8 sm:h-10 w-auto flex-shrink-0"
+                className="h-7 min-[800px]:h-10 w-auto flex-shrink-0"
                 priority
               />
-              <span className="font-serif text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] sm:tracking-[0.3em] md:tracking-[0.45em] whitespace-nowrap hidden sm:inline">
+              <span className="font-serif text-[0.65rem] sm:text-sm md:text-base uppercase tracking-[0.2em] sm:tracking-[0.3em] md:tracking-[0.45em] whitespace-nowrap hidden min-[1080px]:inline">
                 Classic Motor Market
               </span>
             </Link>
           </div>
 
-          <nav className="flex items-center justify-end gap-1.5 sm:gap-2 md:gap-3 lg:gap-4 flex-shrink-0">
+          <nav className="flex items-center justify-end gap-1 sm:gap-3 flex-shrink-0">
             <Link
               href={authLink.href}
-              className="text-[0.65rem] sm:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.35em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden sm:inline-block"
+              className="text-[0.65rem] sm:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.35em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden min-[800px]:inline-block"
             >
               {authLink.label}
             </Link>
@@ -131,11 +131,11 @@ export async function Header() {
                 asChild
                 variant={cta.variant ?? "default"}
                 size={index === 0 ? "default" : "sm"}
-                className="uppercase tracking-[0.25em] sm:tracking-[0.35em] text-[0.65rem] sm:text-sm px-2 sm:px-4 h-8 sm:h-9 md:h-10"
+                className="uppercase tracking-[0.25em] sm:tracking-[0.35em] text-[0.6rem] min-[800px]:text-[0.7rem] px-2 min-[800px]:px-4 h-7.5 min-[800px]:h-9 md:h-10"
               >
                 <Link href={cta.href}>
-                  <span className="hidden sm:inline">{cta.label}</span>
-                  <span className="sm:hidden">{index === 0 ? (isAuthed ? "List" : "Join") : "Browse"}</span>
+                  <span className="hidden min-[800px]:inline">{cta.label}</span>
+                  <span className="min-[800px]:hidden">{index === 0 ? (isAuthed ? "List" : "Join") : "Browse"}</span>
                 </Link>
               </Button>
             ))}
