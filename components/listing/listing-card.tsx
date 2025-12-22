@@ -39,15 +39,12 @@ export function ListingCard({ listing }: ListingCardProps) {
       </div>
       <div className="space-y-3 px-5 py-6">
         <div>
-          <p className="font-serif text-sm uppercase tracking-[0.4em] text-text-muted">
-            {listing.location || "Private"} · {listing.mileage ? `${listing.mileage.toLocaleString()} mi` : "Miles TBD"}
-          </p>
-          <h3 className="font-serif text-2xl text-brand-dark">
-            {listing.year} {listing.make} {listing.model}
+          <h3 className="font-serif text-xl text-brand-dark">
+            {listing.year} {listing.make} {listing.model} - {conditionLabel}
           </h3>
         </div>
-        <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-text-muted">
-          <span>{conditionLabel}</span>
+        <div className="flex items-center justify-between">
+          <span className="text-xs uppercase tracking-[0.35em] text-text-muted">{listing.location || "Private"}</span>
           <span className="font-serif text-xl text-brand-dark">{price}</span>
         </div>
       </div>

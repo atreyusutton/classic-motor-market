@@ -34,8 +34,8 @@ export function Footer() {
               <div className="font-serif text-xl uppercase tracking-[0.4em]">Classic Motor Market</div>
             </div>
             <p className="text-sm text-text-inverse/70 max-w-md leading-relaxed">
-              The private club for European motoring enthusiasts. Editorial storytelling, discreet conversations,
-              and a curated marketplace for remarkable automobiles.
+              A member driven club for European motoring enthusiasts. A curated marketplace, member to member sales,
+              and remarkable vehicles.
             </p>
           </div>
           {footerLinks.map((group) => (

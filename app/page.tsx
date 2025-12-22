@@ -8,6 +8,9 @@ import { SiteContainer } from "@/components/layout/site-container"
 
 export const dynamic = "force-dynamic"
 
+// Helper function to get cutoff date for non-members (avoids impurity in component)
+const getCutoffDate = () => new Date(Date.now() - 48 * 60 * 60 * 1000)
+
 const membershipBenefits = [
   "Discreet seller contact via relay",
   "48-hour early access to new listings",
@@ -20,9 +23,8 @@ const membershipBenefits = [
 export default async function Home() {
   const session = await auth()
   const isMember = !!session?.user
-  const cutoffDate = new Date(Date.now() - 5 * 60 * 1000)
 
-  const visibilityFilter = !isMember ? { createdAt: { lte: cutoffDate } } : {}
+  const visibilityFilter = !isMember ? { createdAt: { lte: getCutoffDate() } } : {}
 
   const featuredListings = await prisma.listing.findMany({
     where: {
@@ -129,9 +131,9 @@ export default async function Home() {
           </div>
           <div className="space-y-4 sm:space-y-5 text-sm leading-relaxed text-brand-dark">
             <p className="font-serif text-xl sm:text-2xl text-brand-dark">
-              From the founders of the revered classic European car club, Fuelfed, comes a new platform allowing you to
-              take control of the sales experience.
+              From the Founders of the classic European car club, Fuelfed, comes a new sales platform for classic and enthusiast European vehicles. Take back control of the sales process with Classic Motor Market.
             </p>
+
             <div className="space-y-4 text-brand-dark">
               <p>
                 <span className="font-bold text-brand-dark">Privacy and Security.</span> Avoid scammers and deal with
@@ -146,12 +148,12 @@ export default async function Home() {
                 create high quality listings. No waiting weeks for a stressful auction listing to go live.
               </p>
               <p>
-                <span className="font-bold text-brand-dark">No destructive comments.</span> No permanent digital
-                footprint, no low reserves.
+                <span className="font-bold text-brand-dark">
+                Only members can see the VIN.</span>The VIN never appears in online searches and is protected from scammers.
               </p>
             </div>
             <Button asChild className="uppercase tracking-[0.35em]">
-              <Link href="/sell">List Vehicle</Link>
+              <Link href="/sell">List Your Vehicle</Link>
             </Button>
           </div>
         </SiteContainer>
@@ -163,7 +165,7 @@ export default async function Home() {
             Membership · $49 yearly
           </p>
           <h3 className="font-serif text-2xl sm:text-3xl text-brand-dark px-4">
-            Serious conversations only. A single annual due keeps the tire-kickers away.
+          Why join a Classic Motor Market as a buyer?
           </h3>
           <div className="grid gap-3 sm:gap-4 text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-brand-dark/80 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {membershipBenefits.map((benefit) => (
