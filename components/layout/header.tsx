@@ -121,7 +121,7 @@ export async function Header() {
           <nav className="flex items-center justify-end gap-1 sm:gap-3 flex-shrink-0">
             <Link
               href={authLink.href}
-              className="text-[0.65rem] sm:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.35em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden min-[800px]:inline-block"
+              className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-[0.4em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden min-[800px]:inline-block"
             >
               {authLink.label}
             </Link>

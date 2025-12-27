@@ -1,22 +1,19 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Roboto_Slab, Abril_Fatface } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { DisclaimerGate } from "@/components/legal/disclaimer-gate";
 
-const sans = Inter({
-  variable: "--font-sans-base",
+const robotoSlab = Roboto_Slab({
+  variable: "--font-roboto-slab",
   subsets: ["latin"],
-  display: "swap",
 });
 
-const serif = Playfair_Display({
-  variable: "--font-serif-base",
+const abrilFatface = Abril_Fatface({
+  variable: "--font-abril-fatface",
+  weight: "400",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -36,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sans.variable} ${serif.variable} min-h-screen bg-page text-text-main font-sans antialiased`}>
+      <body className={`${robotoSlab.variable} ${abrilFatface.variable} min-h-screen bg-page text-text-main font-sans antialiased`}>
         <DisclaimerGate>
           <div className="relative flex min-h-screen flex-col">
             <Header />

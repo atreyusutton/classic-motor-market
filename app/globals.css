@@ -4,8 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-sans-base);
-  --font-serif: var(--font-serif-base);
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: var(--font-roboto-slab);
+  --font-display: var(--font-abril-fatface);
   --color-page: #f3f0dc;
   --color-page-alt: #e9e0b8;
   --color-brand-dark: #223a3a;
@@ -51,9 +52,12 @@
   h2,
   h3,
   h4 {
-    @apply font-serif text-brand-dark tracking-[0.08em] scroll-mt-24;
+    @apply font-serif text-brand-dark tracking-tight font-bold scroll-mt-24;
   }
   p {
     @apply leading-relaxed text-text-main;
+  }
+  .label-text {
+    @apply text-[0.6rem] uppercase tracking-[0.25em] font-bold text-text-muted;
   }
 }

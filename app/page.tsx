@@ -24,8 +24,8 @@ const membershipBenefits = [
 function SpecRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1 border-b border-border-soft pb-2 last:border-none last:pb-0">
-      <span className="text-[0.55rem] uppercase tracking-wider text-text-muted">{label}</span>
-      <span className="font-serif text-sm text-brand-dark leading-tight">{value}</span>
+      <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-text-muted">{label}</span>
+      <span className="font-serif text-sm text-brand-dark font-medium leading-tight">{value}</span>
     </div>
   )
 }
@@ -74,7 +74,7 @@ export default async function Home() {
           alt="Classic touring car"
           fill
           priority
-          className="object-cover"
+          className="object-cover brightness-[0.7]"
         />
         <SiteContainer className="relative flex min-h-[85vh] sm:min-h-[90vh] flex-col items-center justify-center gap-6 sm:gap-8 px-4 text-center text-white">
           <Image
@@ -86,27 +86,26 @@ export default async function Home() {
             priority
           />
           <div className="max-w-3xl space-y-4 sm:space-y-6 px-2">
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight italic text-brand-gold">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] text-brand-gold italic drop-shadow-sm">
               Drive your next adventure...
             </h1>
-            <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.4em] text-white drop-shadow-md">
               Classic Motor Market is an affordable member-driven sales platform for European enthusiast vehicles.
             </p>
-            <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.4em] text-white drop-shadow-md">
               Built by car enthusiasts for car enthusiasts.
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto px-2">
-            <Button asChild size="lg" className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px]">
+            <Button asChild size="lg" className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] bg-brand-dark text-white border-white transition-all duration-300 hover:bg-brand-dark/80 hover:brightness-110 hover:shadow-lg">
               <Link href="/listings">Browse Listings</Link>
             </Button>
             <Button
               asChild
-              variant="outline"
               size="lg"
-              className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] border-white/70 text-white hover:bg-white/10"
+              className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] bg-page text-black border-black transition-all duration-300 hover:bg-page hover:brightness-90 hover:shadow-lg"
             >
-              <Link href="/sell">List An Automobile</Link>
+              <Link href="/sell">List a Vehicle</Link>
             </Button>
           </div>
         </SiteContainer>
