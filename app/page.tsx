@@ -6,15 +6,13 @@ import { ListingCard } from "@/components/listing/listing-card"
 import { auth } from "@/auth"
 import { SiteContainer } from "@/components/layout/site-container"
 import { cn, getCloudflareImageUrl, formatCurrency, generateListingSlug } from "@/lib/utils"
+import { shouldShowAsPlaceholder, createPlaceholderListing } from "@/lib/listing-utils"
 
 export const dynamic = "force-dynamic"
 
-// Helper function to get cutoff date for non-members (avoids impurity in component)
-const getCutoffDate = () => new Date(Date.now() - 48 * 60 * 60 * 1000)
-
 const membershipBenefits = [
   "Discreet seller contact via relay",
-  "48-hour early access to new listings",
+  "10-minute early access to new listings",
   "Full VIN visibility for due diligence",
   "First listing included with membership",
   "Purchase vehicles without auction pressure",
@@ -34,32 +32,51 @@ export default async function Home() {
   const session = await auth()
   const isMember = !!session?.user
 
-  const visibilityFilter = !isMember ? { createdAt: { lte: getCutoffDate() } } : {}
-
-  const featuredListings = await prisma.listing.findMany({
+  const featuredListingsRaw = await prisma.listing.findMany({
     where: {
-      listingStatus: "active",
+      listingStatus: { in: ["active", "sold"] },
       featured: true,
-      ...visibilityFilter,
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: [
+      { listingStatus: "asc" }, // active first
+      { createdAt: "desc" },
+    ],
     take: 5,
     include: { media: { orderBy: { sortOrder: "asc" } } },
   })
 
+  // Transform early access listings to placeholders for non-members
+  const featuredListings = featuredListingsRaw.map((listing) => {
+    if (shouldShowAsPlaceholder(listing, isMember)) {
+      return createPlaceholderListing(listing)
+    }
+    return listing
+  })
+
   let displayListings = featuredListings
   if (featuredListings.length < 5) {
-    const recentListings = await prisma.listing.findMany({
+    const recentListingsRaw = await prisma.listing.findMany({
       where: {
-        listingStatus: "active",
+        listingStatus: { in: ["active", "sold"] },
         featured: false,
         id: { notIn: featuredListings.map((l) => l.id) },
-        ...visibilityFilter,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [
+        { listingStatus: "asc" }, // active first
+        { createdAt: "desc" },
+      ],
       take: 5 - featuredListings.length,
       include: { media: { orderBy: { sortOrder: "asc" } } },
     })
+    
+    // Transform these as well
+    const recentListings = recentListingsRaw.map((listing) => {
+      if (shouldShowAsPlaceholder(listing, isMember)) {
+        return createPlaceholderListing(listing)
+      }
+      return listing
+    })
+    
     displayListings = [...featuredListings, ...recentListings]
   }
 
@@ -215,6 +232,9 @@ export default async function Home() {
           <div className="space-y-12 sm:space-y-24">
             {largeListings.map((listing, index) => {
               const coverImage = listing.media.find((m) => m.isCover) || listing.media[0]
+              const isEarlyAccess = listing.media.length === 0 && listing.make === "New Arrival"
+              const href = isEarlyAccess ? "/login" : generateListingSlug(listing)
+              
               return (
                 <div 
                   key={listing.id} 
@@ -223,8 +243,10 @@ export default async function Home() {
                   <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-start">
                     <div className={cn("space-y-8", index % 2 === 1 ? "lg:order-last" : "")}>
                       <div className="space-y-2">
-                        <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] text-brand-gold font-semibold">Featured Showcase</p>
-                        <Link href={generateListingSlug(listing)}>
+                        <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] text-brand-gold font-semibold">
+                          {isEarlyAccess ? "Member Exclusive Preview" : "Featured Showcase"}
+                        </p>
+                        <Link href={href}>
                           <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl text-brand-dark hover:text-brand-gold transition-colors">
                             {listing.year} {listing.make} {listing.model}
                           </h3>
@@ -241,22 +263,47 @@ export default async function Home() {
                         {listing.maintenanceHistory && (
                           <p className="line-clamp-4">{listing.maintenanceHistory}</p>
                         )}
-                        {!listing.optionsAndFeatures && !listing.vehicleHistory && !listing.maintenanceHistory && (
+                        {!listing.optionsAndFeatures && !listing.vehicleHistory && !listing.maintenanceHistory && !isEarlyAccess && (
                           <p>This exceptional {listing.make} represents a unique opportunity for enthusiasts. Presented in remarkable condition with a focus on originality and preservation.</p>
                         )}
                       </div>
 
                       <Button asChild variant="outline" className="w-full sm:w-auto">
-                        <Link href={generateListingSlug(listing)}>View Full Details</Link>
+                        <Link href={href}>
+                          {isEarlyAccess ? "Become a Member" : "View Full Details"}
+                        </Link>
                       </Button>
                     </div>
 
                     <div className="space-y-4">
                       <Link 
-                        href={generateListingSlug(listing)}
+                        href={href}
                         className="relative group block aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-muted border border-border-soft"
                       >
-                        {coverImage ? (
+                        {isEarlyAccess ? (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black p-8 text-center">
+                            <div className="space-y-5">
+                              <Image
+                                src="/assets/cmm-logo-white.png"
+                                alt="Classic Motor Market"
+                                width={120}
+                                height={120}
+                                className="mx-auto opacity-90"
+                              />
+                              <div className="space-y-3">
+                                <div className="inline-block bg-brand-gold px-4 py-2 text-sm font-bold uppercase tracking-[0.25em] text-brand-dark">
+                                  Members Only
+                                </div>
+                                <p className="text-sm uppercase tracking-[0.25em] text-white font-semibold">
+                                  New Exclusive Listing
+                                </p>
+                                <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                                  10 Minutes Early Access
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ) : coverImage ? (
                           <Image
                             src={getCloudflareImageUrl(coverImage.providerId)}
                             alt={`${listing.year} ${listing.make} ${listing.model}`}
@@ -274,8 +321,8 @@ export default async function Home() {
                         <SpecRow label="Transmission" value={listing.transmission || "—"} />
                         <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} mi` : "—"} />
                         <SpecRow label="Color" value={listing.exteriorColor || "—"} />
-                        <SpecRow label="Location" value={listing.location || "Private"} />
-                        <SpecRow label="Price" value={formatCurrency(listing.askingPrice)} />
+                        <SpecRow label="Location" value={isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")} />
+                        <SpecRow label="Price" value={isEarlyAccess ? "Join to View" : formatCurrency(listing.askingPrice)} />
                       </div>
                     </div>
                   </div>

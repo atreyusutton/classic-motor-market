@@ -4,18 +4,26 @@ import { Button } from "@/components/ui/button"
 import { Bookmark } from "lucide-react"
 import { toggleWatchlist } from "@/app/actions/watchlist"
 import { useTransition, useState } from "react"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 interface WatchlistButtonProps {
   listingId: number
   initialSaved: boolean
+  isLoggedIn: boolean
 }
 
-export function WatchlistButton({ listingId, initialSaved }: WatchlistButtonProps) {
+export function WatchlistButton({ listingId, initialSaved, isLoggedIn }: WatchlistButtonProps) {
   const [isPending, startTransition] = useTransition()
   const [isSaved, setIsSaved] = useState(initialSaved)
+  const router = useRouter()
 
   const onClick = () => {
+    if (!isLoggedIn) {
+      router.push("/login")
+      return
+    }
+
     startTransition(async () => {
       // Optimistic update
       const previousState = isSaved

@@ -74,7 +74,7 @@ export async function Header() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-56 border border-brand-dark/20 bg-page/95 p-2 text-brand-dark shadow-2xl ring-1 ring-brand-dark/25 backdrop-blur"
+                className="w-56 border border-brand-dark/20 bg-white p-2 text-brand-dark shadow-2xl ring-1 ring-brand-dark/25"
                 align="start"
               >
                 <DropdownMenuLabel className="text-[0.65rem] uppercase tracking-[0.4em] text-brand-dark">

@@ -2,24 +2,40 @@ import { prisma } from "@/lib/prisma"
 import { ListingCard } from "@/components/listing/listing-card"
 import { auth } from "@/auth"
 import { SiteContainer } from "@/components/layout/site-container"
+import { shouldShowAsPlaceholder, createPlaceholderListing } from "@/lib/listing-utils"
 
 export const dynamic = "force-dynamic"
 
 export default async function BrowsePage() {
   const session = await auth()
   const isMember = session?.user?.membershipStatus === "member" || session?.user?.isAdmin
-  const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000)
 
-  const listings = await prisma.listing.findMany({
+  // Get all active listings (including early access ones)
+  const activeListingsRaw = await prisma.listing.findMany({
     where: {
       listingStatus: "active",
-      ...(!isMember
-        ? {
-            createdAt: {
-              lte: fortyEightHoursAgo,
-            },
-          }
-        : {}),
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      media: {
+        orderBy: { sortOrder: "asc" },
+      },
+    },
+  })
+
+  // Transform early access listings to placeholders for non-members
+  const activeListings = activeListingsRaw.map((listing) => {
+    if (shouldShowAsPlaceholder(listing, isMember)) {
+      return createPlaceholderListing(listing)
+    }
+    return listing
+  })
+
+  const soldListings = await prisma.listing.findMany({
+    where: {
+      listingStatus: "sold",
     },
     orderBy: {
       createdAt: "desc",
@@ -38,17 +54,35 @@ export default async function BrowsePage() {
           <div className="space-y-2">
             <h1 className="font-serif text-4xl text-brand-dark">Classic Motor Market Catalog</h1>
             <p className="text-xs uppercase tracking-[0.35em] text-text-muted">
-              Become a member to view listings as they go live. Non-members can see the full listing after 48 hours.
+              Become a member to view listings as they go live. Non-members can see the full listing after 10 minutes.
             </p>
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {listings.length > 0 ? (
-            listings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
-          ) : (
-            <div className="col-span-full border border-dashed border-border-strong px-6 py-12 text-center text-xs uppercase tracking-[0.35em] text-text-muted">
-              No vehicles match your filters. New consignments arrive shortly.
+        <div className="space-y-12">
+          {/* Active Listings Section */}
+          <div className="space-y-6">
+            <h2 className="font-serif text-2xl text-brand-dark border-b border-border-soft pb-3">Available Vehicles</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {activeListings.length > 0 ? (
+                activeListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
+              ) : (
+                <div className="col-span-full border border-dashed border-border-strong px-6 py-12 text-center text-xs uppercase tracking-[0.35em] text-text-muted">
+                  No vehicles available. New consignments arrive shortly.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Sold Listings Section */}
+          {soldListings.length > 0 && (
+            <div className="space-y-6">
+              <h2 className="font-serif text-2xl text-brand-dark border-b border-border-soft pb-3">Recently Sold</h2>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {soldListings.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </div>
             </div>
           )}
         </div>

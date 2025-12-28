@@ -67,7 +67,7 @@ export default async function BillingPage({
                  <CheckCircle className="h-4 w-4 text-green-600" /> Contact sellers directly
                </div>
                <div className="flex items-center gap-2 text-sm">
-                 <CheckCircle className="h-4 w-4 text-green-600" /> 48-hour early access to listings
+                 <CheckCircle className="h-4 w-4 text-green-600" /> 10-minute early access to listings
                </div>
                <div className="flex items-center gap-2 text-sm">
                  <CheckCircle className="h-4 w-4 text-green-600" /> Unlimited vehicle listings ($20/ea)

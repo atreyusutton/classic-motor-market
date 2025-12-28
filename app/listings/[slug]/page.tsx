@@ -1,11 +1,11 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { MapPin, Gauge, Info, Clock } from "lucide-react"
+import { Info, Clock } from "lucide-react"
 import { ContactSellerDialog } from "@/components/listing/contact-seller-dialog"
 import { WatchlistButton } from "@/components/listing/watchlist-button"
 import { ShareButton } from "@/components/listing/share-button"
@@ -15,6 +15,7 @@ import { ListingGallery } from "@/components/listing/listing-gallery"
 import { SiteContainer } from "@/components/layout/site-container"
 import { ListingCard } from "@/components/listing/listing-card"
 import { Button } from "@/components/ui/button"
+import { shouldShowAsPlaceholder } from "@/lib/listing-utils"
 
 const CONDITION_LABELS = {
   show_car: "Show car",
@@ -57,11 +58,22 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   if (!listing) notFound()
 
+  // Check if this is an early access listing and user is not a member
+  const isMember = session?.user?.membershipStatus === "member" || session?.user?.isAdmin
+  if (shouldShowAsPlaceholder(listing, isMember)) {
+    // Redirect non-members trying to access early access listings
+    redirect("/login?message=This listing is available to members only")
+  }
+
   const allOtherListings = await prisma.listing.findMany({
     where: {
-      listingStatus: "active",
+      listingStatus: { in: ["active", "sold"] },
       id: { not: listing.id },
     },
+    orderBy: [
+      { listingStatus: "asc" }, // active first
+      { createdAt: "desc" },
+    ],
     include: { media: { orderBy: { sortOrder: "asc" } } },
   })
 
@@ -77,8 +89,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   const price = formatCurrency(listing.askingPrice)
   const isOwner = currentUserId === listing.sellerId
   const isLoggedIn = Boolean(currentUserId)
-  const membershipStatus = session?.user?.membershipStatus
-  const isMember = membershipStatus === "member"
   const sellerDisplayName = listing.seller.username || listing.seller.name?.split(" ")[0] || "seller"
   const conditionLabel = listing.conditionGrade ? CONDITION_LABELS[listing.conditionGrade as keyof typeof CONDITION_LABELS] : undefined
   const canViewIdentifier = Boolean(session?.user)
@@ -88,6 +98,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
     : identifier
     ? `${identifier.slice(0, 4)}••••${identifier.slice(-4)}`
     : "Members only"
+  const isSold = listing.listingStatus === 'sold'
 
   return (
     <div className="bg-page">
@@ -98,17 +109,9 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               Listing {listing.publicId}
             </p>
             <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark">
+              {isSold && <span className="text-red-600 font-bold">SOLD </span>}
               {listing.year} {listing.make} {listing.model}
             </h1>
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-[0.65rem] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] text-text-muted">
-              <span className="flex items-center gap-1.5 sm:gap-2">
-                <MapPin className="h-3 w-3" /> {listing.location || "Private"}
-              </span>
-              <span className="flex items-center gap-1.5 sm:gap-2">
-                <Gauge className="h-3 w-3" /> {listing.mileage ? `${listing.mileage.toLocaleString()} miles` : "Miles undisclosed"}
-              </span>
-              {conditionLabel && <span className="text-brand-gold">{conditionLabel}</span>}
-            </div>
           </div>
           <div className="text-left lg:text-right">
             <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Asking Price</p>
@@ -116,7 +119,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <ListingGallery media={listing.media} />
+        <ListingGallery media={listing.media} isSold={isSold} />
 
         <div className="grid gap-8 sm:gap-10 lg:grid-cols-[2fr_1fr]">
           <div className="space-y-6 sm:space-y-8">
@@ -129,6 +132,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               />
               <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} miles` : "—"} />
               <SpecRow label="Location" value={listing.location || "Private"} />
+              <SpecRow label="Condition" value={conditionLabel || "—"} />
               <SpecRow label="Identifier" value={displayIdentifier} />
             </div>
 
@@ -168,11 +172,22 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
           <aside className="space-y-5 sm:space-y-6 border border-border-strong bg-page-alt p-4 sm:p-6 order-first lg:order-last">
             <div>
-              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Acquire This Vehicle</p>
+              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">
+                {isSold ? 'Listing Price' : 'Acquire This Vehicle'}
+              </p>
               <p className="font-serif text-2xl sm:text-3xl text-brand-dark">{price}</p>
+              {isSold && (
+                <div className="mt-3 rounded-md bg-red-50 border border-red-200 px-3 py-2">
+                  <p className="text-sm font-bold text-red-600 uppercase tracking-[0.2em]">Vehicle Sold</p>
+                </div>
+              )}
             </div>
             <div className="space-y-3">
-              {isOwner ? (
+              {isSold ? (
+                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" disabled variant="secondary">
+                  No Longer Available
+                </Button>
+              ) : isOwner ? (
                 <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" asChild>
                   <Link href="/account/listings">View My Listings</Link>
                 </Button>
@@ -191,7 +206,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                   sellerName={sellerDisplayName}
                 />
               )}
-              <WatchlistButton listingId={listing.id} initialSaved={isSaved} />
+              {!isSold && <WatchlistButton listingId={listing.id} initialSaved={isSaved} isLoggedIn={isLoggedIn} />}
               <ShareButton title={`${listing.year} ${listing.make} ${listing.model}`} />
               <ReportButton listingId={listing.id} />
             </div>

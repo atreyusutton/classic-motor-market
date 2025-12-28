@@ -33,7 +33,7 @@ export function MobileNav({ links, authLink, ctas }: MobileNavProps) {
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="bg-page px-0">
+      <SheetContent side="left" className="bg-white px-0">
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
         <div className="border-b border-border-strong px-6 py-4 font-serif text-lg tracking-[0.2em] text-brand-dark">
           Classic Motor Market

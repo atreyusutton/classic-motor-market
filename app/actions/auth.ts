@@ -66,6 +66,7 @@ export async function registerAction(formData: z.infer<typeof registerSchema>) {
         membershipStatus: "member",
         membershipPaymentStatus: "placeholder_confirmed",
         membershipPaidAt: new Date(),
+        membershipExpiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
       }
     })
     

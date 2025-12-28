@@ -29,6 +29,8 @@
   --color-border: #d7cfac;
   --color-accent: #e3c24a;
   --color-accent-foreground: #223a3a;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #2a2a2a;
   --radius-sm: 1px;
   --radius-md: 2px;
   --radius-lg: 4px;

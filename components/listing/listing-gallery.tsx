@@ -10,7 +10,7 @@ type GalleryMedia = {
   altText?: string | null
 }
 
-export function ListingGallery({ media }: { media: GalleryMedia[] }) {
+export function ListingGallery({ media, isSold }: { media: GalleryMedia[]; isSold?: boolean }) {
   const images = media.length > 0 ? media : []
   const [activeIndex, setActiveIndex] = React.useState(0)
 
@@ -20,14 +20,21 @@ export function ListingGallery({ media }: { media: GalleryMedia[] }) {
     <div className="space-y-3 sm:space-y-4">
       <div className="relative aspect-[16/9] w-full overflow-hidden border border-border-strong bg-card">
         {activeImage ? (
-          <Image
-            key={activeImage.id}
-            src={getCloudflareImageUrl(activeImage.providerId)}
-            alt={activeImage.altText || "Listing image"}
-            fill
-            className="object-cover"
-            priority
-          />
+          <>
+            <Image
+              key={activeImage.id}
+              src={getCloudflareImageUrl(activeImage.providerId)}
+              alt={activeImage.altText || "Listing image"}
+              fill
+              className="object-cover"
+              priority
+            />
+            {isSold && (
+              <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 font-bold text-sm uppercase tracking-[0.2em] shadow-lg">
+                SOLD
+              </div>
+            )}
+          </>
         ) : (
           <div className="flex h-full items-center justify-center text-xs sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.4em] text-text-muted px-4">
             Imagery in preparation
