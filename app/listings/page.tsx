@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic"
 
 export default async function BrowsePage() {
   const session = await auth()
-  const isMember = session?.user?.membershipStatus === "member" || session?.user?.isAdmin
+  const isMember = session?.user?.membershipStatus === "member" || Boolean(session?.user?.isAdmin)
 
   // Get all active listings (including early access ones)
   const activeListingsRaw = await prisma.listing.findMany({
