@@ -59,7 +59,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   if (!listing) notFound()
 
   // Check if this is an early access listing and user is not a member
-  const isMember = session?.user?.membershipStatus === "member" || session?.user?.isAdmin
+  const isMember = session?.user?.membershipStatus === "member" || Boolean(session?.user?.isAdmin)
   if (shouldShowAsPlaceholder(listing, isMember)) {
     // Redirect non-members trying to access early access listings
     redirect("/login?message=This listing is available to members only")
