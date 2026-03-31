@@ -72,6 +72,11 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
             {isSold && !isEarlyAccess && <span className="text-red-600 font-bold"> SOLD</span>}
           </h3>
         </div>
+        {!isEarlyAccess && (
+          <p className="text-[0.7rem] text-text-muted">
+            {[listing.mileage ? `${listing.mileage.toLocaleString()} mi` : null, listing.transmission].filter(Boolean).join(" · ")}
+          </p>
+        )}
         <div className="flex items-end justify-between">
           <span className="text-[0.7rem] uppercase tracking-[0.08em] font-semibold text-text-muted">
             {isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")}
