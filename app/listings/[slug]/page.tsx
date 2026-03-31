@@ -109,6 +109,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
           </h1>
           <span className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-brand-dark shrink-0">{price}</span>
         </div>
+        <Separator className="border-border-soft" />
 
         {/* Hero Image */}
         {coverImage && (
@@ -269,8 +270,9 @@ function SpecRow({ label, value }: { label: string; value: string }) {
 
 function NarrativeCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="bg-card px-5 py-4 space-y-2">
+    <div className="bg-card px-5 py-4 space-y-3">
       <h3 className="font-sans text-sm sm:text-base font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-brand-dark">{title}</h3>
+      <Separator className="border-border-soft" />
       <p className="font-serif text-xs sm:text-sm leading-relaxed text-text-main whitespace-pre-wrap">{body}</p>
     </div>
   )
