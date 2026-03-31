@@ -66,24 +66,26 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
         )}
       </div>
       <div className="flex flex-1 flex-col justify-between space-y-3 px-5 py-5">
-        <div className="space-y-1">
+        <div>
           <h3 className="font-serif text-xl text-brand-dark group-hover:text-brand-gold transition-colors">
             {listing.year} {listing.make} {listing.model}
             {isSold && !isEarlyAccess && <span className="text-red-600 font-bold"> SOLD</span>}
           </h3>
-          {!isEarlyAccess && (
-            <p className="text-[0.65rem] uppercase tracking-[0.08em] text-text-muted">
-              {[
-                listing.mileage ? `${Math.round(listing.mileage / 1000)}k mi` : null,
-                listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed/i, "$1 sp.").replace(/manual/i, "").replace(/automatic/i, "auto").trim() : null
-              ].filter(Boolean).join(" · ")}
-            </p>
-          )}
         </div>
         <div className="flex items-end justify-between">
-          <span className="text-[0.7rem] uppercase tracking-[0.08em] font-semibold text-text-muted">
-            {isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")}
-          </span>
+          <div className="space-y-1">
+            {!isEarlyAccess && (
+              <p className="text-xs uppercase tracking-[0.08em] font-bold text-brand-dark">
+                {[
+                  listing.mileage ? `${Math.round(listing.mileage / 1000)}k mi` : null,
+                  listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed/i, "$1 sp.").replace(/manual/i, "").replace(/automatic/i, "auto").trim() : null
+                ].filter(Boolean).join(" · ")}
+              </p>
+            )}
+            <p className="text-[0.7rem] uppercase tracking-[0.08em] font-semibold text-text-muted">
+              {isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")}
+            </p>
+          </div>
           {!isEarlyAccess && <span className="font-serif text-xl text-brand-dark">{price}</span>}
           {isEarlyAccess && (
             <span className="text-xs uppercase tracking-[0.1em] font-bold text-brand-gold">
