@@ -65,18 +65,18 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
           </div>
         )}
       </div>
-      <div className="flex flex-1 flex-col justify-between space-y-4 px-5 py-6">
-        <div>
+      <div className="flex flex-1 flex-col justify-between space-y-3 px-5 py-5">
+        <div className="space-y-1">
           <h3 className="font-serif text-xl text-brand-dark group-hover:text-brand-gold transition-colors">
             {listing.year} {listing.make} {listing.model}
             {isSold && !isEarlyAccess && <span className="text-red-600 font-bold"> SOLD</span>}
           </h3>
+          {!isEarlyAccess && (
+            <p className="text-[0.65rem] uppercase tracking-[0.08em] text-text-muted">
+              {[listing.mileage ? `${listing.mileage.toLocaleString()} mi` : null, listing.transmission].filter(Boolean).join(" · ")}
+            </p>
+          )}
         </div>
-        {!isEarlyAccess && (
-          <p className="text-[0.7rem] text-text-muted">
-            {[listing.mileage ? `${listing.mileage.toLocaleString()} mi` : null, listing.transmission].filter(Boolean).join(" · ")}
-          </p>
-        )}
         <div className="flex items-end justify-between">
           <span className="text-[0.7rem] uppercase tracking-[0.08em] font-semibold text-text-muted">
             {isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")}
