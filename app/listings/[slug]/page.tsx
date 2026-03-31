@@ -65,13 +65,12 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   const allOtherListings = await prisma.listing.findMany({
     where: {
-      listingStatus: { in: ["active", "sold"] },
+      listingStatus: "active",
       id: { not: listing.id },
     },
-    orderBy: [
-      { listingStatus: "asc" }, // active first
-      { createdAt: "desc" },
-    ],
+    orderBy: {
+      createdAt: "desc",
+    },
     include: { media: { orderBy: { sortOrder: "asc" } } },
   })
 
@@ -104,8 +103,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         {/* Title + Price */}
         <div className="flex items-baseline justify-between gap-4">
           <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-brand-dark">
-            {isSold && <span className="text-red-600">SOLD </span>}
             {listing.year} {listing.make} {listing.model}
+            {isSold && <span className="text-red-600"> SOLD</span>}
           </h1>
           <span className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-brand-dark shrink-0">{price}</span>
         </div>

@@ -68,8 +68,8 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
       <div className="flex flex-1 flex-col justify-between space-y-4 px-5 py-6">
         <div>
           <h3 className="font-serif text-xl text-brand-dark group-hover:text-brand-gold transition-colors">
-            {isSold && !isEarlyAccess && <span className="text-red-600 font-bold">SOLD </span>}
             {listing.year} {listing.make} {listing.model}
+            {isSold && !isEarlyAccess && <span className="text-red-600 font-bold"> SOLD</span>}
           </h3>
         </div>
         <div className="flex items-end justify-between">

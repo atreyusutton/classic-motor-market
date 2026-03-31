@@ -38,7 +38,7 @@ export default async function BrowsePage() {
       listingStatus: "sold",
     },
     orderBy: {
-      createdAt: "desc",
+      updatedAt: "desc",
     },
     include: {
       media: {

@@ -29,22 +29,22 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="relative h-10 w-10">
-                <Image src="/assets/logo.png" alt="Classic Motor Market" fill className="object-contain" />
+                <Image src="/assets/cmm-logo-white.png" alt="Classic Motor Market" fill className="object-contain" />
               </div>
-              <div className="font-serif text-xl uppercase tracking-[0.2em]">Classic Motor Market</div>
+              <div className="font-sans text-lg font-bold uppercase tracking-[0.1em]">Classic Motor Market</div>
             </div>
-            <p className="text-sm text-text-inverse/70 max-w-md leading-relaxed">
+            <p className="font-serif text-sm text-text-inverse/70 max-w-md leading-relaxed">
               A member driven club for European motoring enthusiasts. A curated marketplace, member to member sales,
               and remarkable vehicles.
             </p>
           </div>
           {footerLinks.map((group) => (
             <div key={group.title}>
-              <p className="font-serif text-xs uppercase tracking-[0.2em] text-brand-gold">{group.title}</p>
-              <ul className="mt-4 space-y-2 text-sm uppercase tracking-[0.15em] text-text-inverse/70">
+              <p className="font-sans text-xs uppercase tracking-[0.2em] text-brand-gold font-bold">{group.title}</p>
+              <ul className="mt-4 space-y-2 font-serif text-sm tracking-[0.08em] text-text-inverse/70">
                 {group.items.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className="hover:text-text-inverse">
+                    <Link href={item.href} className="hover:text-text-inverse transition-colors">
                       {item.label}
                     </Link>
                   </li>
@@ -53,7 +53,7 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-10 border-t border-text-inverse/20 pt-6 text-xs uppercase tracking-[0.2em] text-text-inverse/60">
+        <div className="mt-10 border-t border-text-inverse/20 pt-6 font-serif text-xs tracking-[0.1em] text-text-inverse/60">
           © {new Date().getFullYear()} Classic Motor Market · Private Listing Club
         </div>
       </SiteContainer>

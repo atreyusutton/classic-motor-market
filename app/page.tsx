@@ -34,13 +34,12 @@ export default async function Home() {
 
   const featuredListingsRaw = await prisma.listing.findMany({
     where: {
-      listingStatus: { in: ["active", "sold"] },
+      listingStatus: "active",
       featured: true,
     },
-    orderBy: [
-      { listingStatus: "asc" }, // active first
-      { createdAt: "desc" },
-    ],
+    orderBy: {
+      createdAt: "desc",
+    },
     take: 5,
     include: { media: { orderBy: { sortOrder: "asc" } } },
   })
@@ -57,14 +56,13 @@ export default async function Home() {
   if (featuredListings.length < 5) {
     const recentListingsRaw = await prisma.listing.findMany({
       where: {
-        listingStatus: { in: ["active", "sold"] },
+        listingStatus: "active",
         featured: false,
         id: { notIn: featuredListings.map((l) => l.id) },
       },
-      orderBy: [
-        { listingStatus: "asc" }, // active first
-        { createdAt: "desc" },
-      ],
+      orderBy: {
+        createdAt: "desc",
+      },
       take: 5 - featuredListings.length,
       include: { media: { orderBy: { sortOrder: "asc" } } },
     })
