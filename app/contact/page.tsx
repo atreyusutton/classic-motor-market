@@ -22,32 +22,32 @@ export default function ContactPage() {
     <div className="bg-page py-16">
       <SiteContainer className="max-w-2xl space-y-6">
         <div className="space-y-3">
-          <p className="font-serif text-xs uppercase tracking-[0.5em] text-brand-gold">Correspondence</p>
+          <p className="font-serif text-xs uppercase tracking-[0.25em] text-brand-gold">Correspondence</p>
           <h1 className="font-serif text-4xl text-brand-dark">Write to the Classic Motor Market team</h1>
-          <p className="text-xs uppercase tracking-[0.35em] text-text-muted">
+          <p className="text-xs uppercase tracking-[0.18em] text-text-muted">
             Prefer email? reach us at{" "}
             <a href="mailto:atreyusutton@proton.me" className="text-brand-dark underline underline-offset-4">
               atreyusutton@proton.me
             </a>
           </p>
         </div>
-        <Card className="border border-border-strong bg-card">
+        <Card className="bg-card">
           <CardContent className="pt-8">
             <form action={submitContact} className="space-y-5">
               <div className="grid gap-2">
-                <Label htmlFor="name" className="text-xs uppercase tracking-[0.35em] text-text-muted">
+                <Label htmlFor="name" className="text-xs uppercase tracking-[0.18em] text-text-muted">
                   Name
                 </Label>
                 <Input id="name" name="name" placeholder="Your Name" required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-xs uppercase tracking-[0.35em] text-text-muted">
+                <Label htmlFor="email" className="text-xs uppercase tracking-[0.18em] text-text-muted">
                   Email
                 </Label>
                 <Input id="email" name="email" type="email" placeholder="your@email.com" required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="message" className="text-xs uppercase tracking-[0.35em] text-text-muted">
+                <Label htmlFor="message" className="text-xs uppercase tracking-[0.18em] text-text-muted">
                   Message
                 </Label>
                 <Textarea id="message" name="message" placeholder="How can we assist?" className="min-h-[180px]" required />

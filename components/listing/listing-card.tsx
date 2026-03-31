@@ -22,8 +22,8 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
   const href = isEarlyAccess ? "/login" : generateListingSlug(listing as any)
 
   return (
-    <Link href={href} className="group flex flex-col h-full border border-border-soft bg-card transition hover:border-brand-gold">
-      <div className="relative aspect-[4/3] border-b border-border-soft bg-muted">
+    <Link href={href} className="group flex flex-col h-full bg-card transition">
+      <div className="relative aspect-[4/3] bg-muted">
         {isEarlyAccess ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black p-6 text-center">
             <div className="space-y-4">
@@ -35,13 +35,13 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
                 className="mx-auto opacity-90"
               />
               <div className="space-y-2">
-                <div className="inline-block bg-brand-gold px-3 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-brand-dark">
+                <div className="inline-block bg-brand-gold px-3 py-1.5 text-xs font-bold uppercase tracking-[0.1em] text-brand-dark">
                   Members Only
                 </div>
-                <p className="text-xs uppercase tracking-[0.2em] text-white/90 font-semibold">
+                <p className="text-xs uppercase tracking-[0.1em] text-white/90 font-semibold">
                   New Listing
                 </p>
-                <p className="text-[0.65rem] uppercase tracking-[0.15em] text-white/60">
+                <p className="text-[0.65rem] uppercase tracking-[0.08em] text-white/60">
                   10-Min Early Access
                 </p>
               </div>
@@ -55,12 +55,12 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-xs uppercase tracking-[0.35em] text-text-muted">
+          <div className="flex h-full items-center justify-center text-xs uppercase tracking-[0.18em] text-text-muted">
             No Imagery
           </div>
         )}
         {isSold && !isEarlyAccess && (
-          <div className="absolute top-2 right-2 bg-red-600 text-white px-2.5 py-1 font-bold text-xs uppercase tracking-[0.15em] shadow-lg">
+          <div className="absolute top-2 right-2 bg-red-600 text-white px-2.5 py-1 font-bold text-xs uppercase tracking-[0.08em] shadow-lg">
             SOLD
           </div>
         )}
@@ -73,12 +73,12 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
           </h3>
         </div>
         <div className="flex items-end justify-between">
-          <span className="text-[0.7rem] uppercase tracking-[0.15em] font-semibold text-text-muted">
+          <span className="text-[0.7rem] uppercase tracking-[0.08em] font-semibold text-text-muted">
             {isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")}
           </span>
           {!isEarlyAccess && <span className="font-serif text-xl text-brand-dark">{price}</span>}
           {isEarlyAccess && (
-            <span className="text-xs uppercase tracking-[0.2em] font-bold text-brand-gold">
+            <span className="text-xs uppercase tracking-[0.1em] font-bold text-brand-gold">
               Join Now
             </span>
           )}

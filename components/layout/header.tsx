@@ -54,7 +54,7 @@ export async function Header() {
   return (
     <>
       <div className="bg-brand-dark text-white overflow-hidden">
-        <SiteContainer className="py-2 text-center text-[0.6rem] min-[800px]:text-[0.68rem] font-semibold uppercase tracking-[0.3em] min-[800px]:tracking-[0.4em] px-4 whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <SiteContainer className="py-2 text-center text-[0.6rem] min-[800px]:text-[0.68rem] font-semibold uppercase tracking-[0.15em] min-[800px]:tracking-[0.2em] px-4 whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <span className="hidden min-[1080px]:inline">FUELFED CLASSIC MOTOR MARKET POP-UP: MAY 15, 2026 / AT 2028 LEIGH NORTHBROOK / 9:00 TO 11:00AM</span>
           <span className="min-[1080px]:hidden">FUELFED POP-UP: MAY 15, 2026</span>
         </SiteContainer>
@@ -77,7 +77,7 @@ export async function Header() {
                 className="w-56 border border-brand-dark/20 bg-white p-2 text-brand-dark shadow-2xl ring-1 ring-brand-dark/25"
                 align="start"
               >
-                <DropdownMenuLabel className="text-[0.65rem] uppercase tracking-[0.4em] text-brand-dark">
+                <DropdownMenuLabel className="text-[0.65rem] uppercase tracking-[0.2em] text-brand-dark">
                   Quick Links
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-brand-dark/30" />
@@ -85,7 +85,7 @@ export async function Header() {
                   <DropdownMenuItem
                     key={link.href}
                     asChild
-                    className="text-[0.7rem] uppercase tracking-[0.35em]"
+                    className="text-[0.7rem] uppercase tracking-[0.18em]"
                   >
                     <Link
                       href={link.href}
@@ -112,7 +112,7 @@ export async function Header() {
                 className="h-7 min-[800px]:h-10 w-auto flex-shrink-0"
                 priority
               />
-              <span className="font-serif text-[0.65rem] sm:text-sm md:text-base uppercase tracking-[0.2em] sm:tracking-[0.3em] md:tracking-[0.45em] whitespace-nowrap hidden min-[1080px]:inline">
+              <span className="font-serif font-bold text-[0.65rem] sm:text-sm md:text-base uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.22em] whitespace-nowrap hidden min-[1080px]:inline">
                 Classic Motor Market
               </span>
             </Link>
@@ -121,7 +121,7 @@ export async function Header() {
           <nav className="flex items-center justify-end gap-1 sm:gap-3 flex-shrink-0">
             <Link
               href={authLink.href}
-              className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-[0.4em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden min-[800px]:inline-block"
+              className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-[0.2em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden min-[800px]:inline-block"
             >
               {authLink.label}
             </Link>
@@ -131,7 +131,7 @@ export async function Header() {
                 asChild
                 variant={cta.variant ?? "default"}
                 size={index === 0 ? "default" : "sm"}
-                className="uppercase tracking-[0.25em] sm:tracking-[0.35em] text-[0.6rem] min-[800px]:text-[0.7rem] px-2 min-[800px]:px-4 h-7.5 min-[800px]:h-9 md:h-10"
+                className="uppercase tracking-[0.12em] sm:tracking-[0.18em] text-[0.6rem] min-[800px]:text-[0.7rem] px-2 min-[800px]:px-4 h-7.5 min-[800px]:h-9 md:h-10"
               >
                 <Link href={cta.href}>
                   <span className="hidden min-[800px]:inline">{cta.label}</span>

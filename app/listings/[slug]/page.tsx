@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { prisma } from "@/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
@@ -10,7 +11,7 @@ import { ContactSellerDialog } from "@/components/listing/contact-seller-dialog"
 import { WatchlistButton } from "@/components/listing/watchlist-button"
 import { ShareButton } from "@/components/listing/share-button"
 import { ReportButton } from "@/components/listing/report-button"
-import { formatCurrency } from "@/lib/utils"
+import { formatCurrency, getCloudflareImageUrl } from "@/lib/utils"
 import { ListingGallery } from "@/components/listing/listing-gallery"
 import { SiteContainer } from "@/components/layout/site-container"
 import { ListingCard } from "@/components/listing/listing-card"
@@ -100,30 +101,42 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
     : "Members only"
   const isSold = listing.listingStatus === 'sold'
 
+  const coverImage = listing.media.find((m: any) => m.isCover) || listing.media[0]
+
   return (
     <div className="bg-page">
       <SiteContainer className="space-y-8 sm:space-y-10 py-8 sm:py-12 md:py-16">
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[2fr_1fr] lg:items-end">
-          <div className="space-y-2">
-            <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] sm:tracking-[0.5em] text-brand-gold">
-              Listing {listing.publicId}
-            </p>
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark">
-              {isSold && <span className="text-red-600 font-bold">SOLD </span>}
-              {listing.year} {listing.make} {listing.model}
-            </h1>
-          </div>
-          <div className="text-left lg:text-right">
-            <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Asking Price</p>
-            <p className="font-serif text-3xl sm:text-4xl text-brand-dark">{price}</p>
-          </div>
+        {/* Title + Price */}
+        <div className="flex items-baseline justify-between gap-4">
+          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-brand-dark">
+            {isSold && <span className="text-red-600">SOLD </span>}
+            {listing.year} {listing.make} {listing.model}
+          </h1>
+          <span className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-brand-dark shrink-0">{price}</span>
         </div>
 
-        <ListingGallery media={listing.media} isSold={isSold} />
+        {/* Hero Image */}
+        {coverImage && (
+          <a href="#gallery" className="block relative aspect-[16/9] w-full overflow-hidden bg-card cursor-pointer">
+            <Image
+              src={getCloudflareImageUrl(coverImage.providerId)}
+              alt={`${listing.year} ${listing.make} ${listing.model}`}
+              fill
+              className="object-cover"
+              priority
+            />
+            {isSold && (
+              <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 font-bold text-sm uppercase tracking-[0.1em] shadow-lg">
+                SOLD
+              </div>
+            )}
+          </a>
+        )}
 
+        {/* All Info */}
         <div className="grid gap-8 sm:gap-10 lg:grid-cols-[2fr_1fr]">
           <div className="space-y-6 sm:space-y-8">
-            <div className="grid gap-4 border border-border-soft bg-page-alt p-4 sm:p-6 text-xs sm:text-sm uppercase tracking-[0.2em] sm:tracking-[0.25em] text-brand-dark/80 grid-cols-1 sm:grid-cols-2">
+            <div className="grid gap-4 bg-page-alt p-4 sm:p-6 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark/80 grid-cols-1 sm:grid-cols-2">
               <SpecRow label="Engine" value={listing.engine || "—"} />
               <SpecRow label="Transmission" value={listing.transmission || "—"} />
               <SpecRow
@@ -155,30 +168,30 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
             <div className="flex flex-wrap gap-3">
               {listing.titleStatus && (
-                <Badge className="rounded-none border border-border-strong bg-transparent text-brand-dark">
+                <Badge className="rounded-none bg-transparent text-brand-dark">
                   Title: {listing.titleStatus}
                 </Badge>
               )}
               {listing.carfaxAvailable && (
-                <Badge className="rounded-none border border-border-strong bg-transparent text-brand-dark">
+                <Badge className="rounded-none bg-transparent text-brand-dark">
                   Carfax Available
                 </Badge>
               )}
               {!listing.titleStatus && !listing.carfaxAvailable && (
-                <span className="text-xs uppercase tracking-[0.35em] text-text-muted">Documentation pending</span>
+                <span className="text-xs uppercase tracking-[0.18em] text-text-muted">Documentation pending</span>
               )}
             </div>
           </div>
 
-          <aside className="space-y-5 sm:space-y-6 border border-border-strong bg-page-alt p-4 sm:p-6 order-first lg:order-last">
+          <aside className="space-y-5 sm:space-y-6 bg-page-alt p-4 sm:p-6 order-first lg:order-last">
             <div>
-              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">
+              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] text-text-muted">
                 {isSold ? 'Listing Price' : 'Acquire This Vehicle'}
               </p>
               <p className="font-serif text-2xl sm:text-3xl text-brand-dark">{price}</p>
               {isSold && (
-                <div className="mt-3 rounded-md bg-red-50 border border-red-200 px-3 py-2">
-                  <p className="text-sm font-bold text-red-600 uppercase tracking-[0.2em]">Vehicle Sold</p>
+                <div className="mt-3 rounded-md bg-red-50 px-3 py-2">
+                  <p className="text-sm font-bold text-red-600 uppercase tracking-[0.1em]">Vehicle Sold</p>
                 </div>
               )}
             </div>
@@ -212,24 +225,32 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
             <Separator />
             <div className="space-y-2">
-              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Seller</p>
-              <p className="font-serif text-base sm:text-lg text-brand-dark">@{sellerDisplayName}</p>
-              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">
-                Member since {new Date(listing.seller.createdAt).getFullYear()}
+              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] text-text-muted">Seller</p>
+              <p className="font-serif text-base sm:text-lg text-brand-dark">Private</p>
+              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] text-text-muted">
+                Member since {new Date(listing.seller.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               </p>
             </div>
             <p className="text-[10px] sm:text-[11px] leading-relaxed text-text-muted">
               Classic Motor Market facilitates introductions between members. Inspect vehicles independently and complete
               your own due diligence before transacting.
             </p>
-            <div className="text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">Listing ID {listing.publicId}</div>
+            <div className="text-[0.65rem] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] text-text-muted">Listing ID {listing.publicId}</div>
           </aside>
         </div>
+
+        {/* Image Gallery */}
+        {listing.media.length > 1 && (
+          <div className="space-y-4">
+            <h2 className="font-serif text-xl sm:text-2xl text-brand-dark">Gallery</h2>
+            <ListingGallery media={listing.media} isSold={isSold} />
+          </div>
+        )}
       </SiteContainer>
 
       <section className="bg-page-alt py-12 sm:py-16">
         <SiteContainer>
-          <div className="flex flex-col gap-4 border-b border-border-soft pb-6 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
+          <div className="flex flex-col gap-4 pb-6 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
             <h2 className="font-serif text-2xl sm:text-3xl text-brand-dark">More automobiles from the clubhouse</h2>
             <Button variant="ghost" asChild className="w-full sm:w-auto">
               <Link href="/listings">Return to catalogue</Link>
@@ -239,7 +260,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             {relatedListings.length > 0 ? (
               relatedListings.map((related) => <ListingCard key={related.id} listing={related} />)
             ) : (
-              <div className="col-span-full border border-dashed border-border-strong px-6 py-12 text-center text-xs uppercase tracking-[0.35em] text-text-muted">
+              <div className="col-span-full px-6 py-12 text-center text-xs uppercase tracking-[0.18em] text-text-muted">
                 Additional listings arrive shortly.
               </div>
             )}
@@ -263,7 +284,7 @@ function NarrativeCard({ title, body }: { title: string; body: string }) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="font-serif text-base sm:text-lg uppercase tracking-[0.35em] sm:tracking-[0.4em] text-brand-dark">{title}</CardTitle>
+        <CardTitle className="font-serif text-base sm:text-lg uppercase tracking-[0.18em] sm:tracking-[0.2em] text-brand-dark">{title}</CardTitle>
       </CardHeader>
       <CardContent className="text-xs sm:text-sm leading-relaxed text-text-main whitespace-pre-wrap">{body}</CardContent>
     </Card>

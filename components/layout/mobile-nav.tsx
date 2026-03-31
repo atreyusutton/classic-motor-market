@@ -27,7 +27,7 @@ export function MobileNav({ links, authLink, ctas }: MobileNavProps) {
       <SheetTrigger asChild>
         <Button
           variant="ghost"
-          className="px-0 text-sm tracking-[0.3em] uppercase text-brand-dark hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+          className="px-0 text-sm tracking-[0.15em] uppercase text-brand-dark hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
         >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle Menu</span>
@@ -35,10 +35,10 @@ export function MobileNav({ links, authLink, ctas }: MobileNavProps) {
       </SheetTrigger>
       <SheetContent side="left" className="bg-white px-0">
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-        <div className="border-b border-border-strong px-6 py-4 font-serif text-lg tracking-[0.2em] text-brand-dark">
+        <div className="border-b border-border-strong px-6 py-4 font-serif text-lg tracking-[0.1em] text-brand-dark">
           Classic Motor Market
         </div>
-        <div className="space-y-4 px-6 py-6 text-xs font-semibold uppercase tracking-[0.35em] text-brand-dark">
+        <div className="space-y-4 px-6 py-6 text-xs font-semibold uppercase tracking-[0.18em] text-brand-dark">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -62,7 +62,7 @@ export function MobileNav({ links, authLink, ctas }: MobileNavProps) {
                 key={cta.href}
                 asChild
                 variant={cta.variant ?? "default"}
-                className="w-full uppercase tracking-[0.35em]"
+                className="w-full uppercase tracking-[0.18em]"
                 onClick={() => setOpen(false)}
               >
                 <Link href={cta.href}>{cta.label}</Link>

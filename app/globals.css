@@ -9,7 +9,7 @@
   --font-display: var(--font-abril-fatface);
   --color-page: #f3f0dc;
   --color-page-alt: #e9e0b8;
-  --color-brand-dark: #223a3a;
+  --color-brand-dark: #164650;
   --color-brand-gold: #e3c24a;
   --color-text-main: #2a2a2a;
   --color-text-muted: #6b6b6b;
@@ -20,15 +20,15 @@
   --color-card-foreground: #2a2a2a;
   --color-background: #f3f0dc;
   --color-foreground: #2a2a2a;
-  --color-primary: #223a3a;
+  --color-primary: #164650;
   --color-primary-foreground: #f5f5f5;
   --color-secondary: #e9e0b8;
-  --color-secondary-foreground: #223a3a;
+  --color-secondary-foreground: #164650;
   --color-muted: #e9e0b8;
   --color-muted-foreground: #6b6b6b;
   --color-border: #d7cfac;
   --color-accent: #e3c24a;
-  --color-accent-foreground: #223a3a;
+  --color-accent-foreground: #164650;
   --color-popover: #ffffff;
   --color-popover-foreground: #2a2a2a;
   --radius-sm: 1px;
@@ -43,12 +43,12 @@
 
 @layer base {
   * {
-    @apply border-border-soft outline-brand-dark/10;
+    @apply border-transparent outline-brand-dark/10;
   }
   body {
     @apply bg-page text-text-main font-sans antialiased;
     background-image: radial-gradient(circle at top, #f7f3e1 0%, #f3f0dc 45%, #efe7c6 100%);
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
   }
   h1,
   h2,
@@ -60,6 +60,6 @@
     @apply leading-relaxed text-text-main;
   }
   .label-text {
-    @apply text-[0.6rem] uppercase tracking-[0.25em] font-bold text-text-muted;
+    @apply text-[0.6rem] uppercase tracking-[0.12em] font-bold text-text-muted;
   }
 }

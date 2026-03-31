@@ -22,7 +22,7 @@ const membershipBenefits = [
 function SpecRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1 border-b border-border-soft pb-2 last:border-none last:pb-0">
-      <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-text-muted">{label}</span>
+      <span className="text-[0.55rem] uppercase tracking-[0.1em] font-bold text-text-muted">{label}</span>
       <span className="font-serif text-sm text-brand-dark font-medium leading-tight">{value}</span>
     </div>
   )
@@ -106,10 +106,10 @@ export default async function Home() {
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] text-brand-gold italic drop-shadow-sm">
               Drive your next adventure...
             </h1>
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.4em] text-white drop-shadow-md">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.1em] text-white drop-shadow-md">
               Classic Motor Market is an affordable member-driven sales platform for European enthusiast vehicles.
             </p>
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.4em] text-white drop-shadow-md">
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.1em] text-white drop-shadow-md">
               Built by car enthusiasts for car enthusiasts.
             </p>
           </div>
@@ -181,7 +181,7 @@ export default async function Home() {
                 Only members can see the VIN.</span>The VIN never appears in online searches and is protected from scammers.
               </p>
             </div>
-            <Button asChild className="uppercase tracking-[0.35em]">
+            <Button asChild className="uppercase tracking-[0.18em]">
               <Link href="/sell">List Your Vehicle</Link>
             </Button>
           </div>
@@ -190,15 +190,15 @@ export default async function Home() {
 
       <section className="bg-page-alt py-12 sm:py-16 text-center">
         <SiteContainer className="space-y-5 sm:space-y-6">
-          <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] sm:tracking-[0.5em] text-brand-dark">
+          <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark">
             Membership · $49 yearly
           </p>
           <h3 className="font-serif text-2xl sm:text-3xl text-brand-dark px-4">
           Why join a Classic Motor Market as a buyer?
           </h3>
-          <div className="grid gap-3 sm:gap-4 text-[0.65rem] sm:text-xs uppercase tracking-[0.3em] sm:tracking-[0.35em] text-brand-dark/80 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 text-[0.65rem] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] text-brand-dark/80 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {membershipBenefits.map((benefit) => (
-              <div key={benefit} className="border border-border-soft bg-card px-4 py-5 sm:py-6">
+              <div key={benefit} className="bg-card px-4 py-5 sm:py-6">
                 {benefit}
               </div>
             ))}
@@ -211,15 +211,15 @@ export default async function Home() {
 
       <section className="bg-page py-12 sm:py-16 md:py-20 border-t border-border-soft/30">
         <SiteContainer className="space-y-12 sm:space-y-20">
-          <div className="flex flex-col gap-4 border-b border-border-soft pb-6 sm:pb-8 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
+          <div className="flex flex-col gap-4 pb-6 sm:pb-8 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
             <div className="space-y-2">
-              <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] sm:tracking-[0.5em] text-brand-dark">
+              <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark">
                 Member Listings
               </p>
               <h4 className="font-serif text-2xl sm:text-3xl text-brand-dark px-2 sm:px-0">
                 Hand-picked vehicles presently inside the showroom
               </h4>
-              <p className="text-xs sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-text-muted">
+              <p className="text-xs sm:text-sm uppercase tracking-[0.15em] sm:tracking-[0.18em] text-text-muted">
                 One-column on mobile, three on desktop. No clutter, just cars.
               </p>
             </div>
@@ -238,12 +238,12 @@ export default async function Home() {
               return (
                 <div 
                   key={listing.id} 
-                  className="bg-card border border-border-soft p-6 sm:p-8 md:p-10 shadow-sm"
+                  className="bg-card p-6 sm:p-8 md:p-10 shadow-sm"
                 >
                   <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-start">
                     <div className={cn("space-y-8", index % 2 === 1 ? "lg:order-last" : "")}>
                       <div className="space-y-2">
-                        <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.4em] text-brand-gold font-semibold">
+                        <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.1em] text-brand-gold font-semibold">
                           {isEarlyAccess ? "Member Exclusive Preview" : "Featured Showcase"}
                         </p>
                         <Link href={href}>
@@ -278,7 +278,7 @@ export default async function Home() {
                     <div className="space-y-4">
                       <Link 
                         href={href}
-                        className="relative group block aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-muted border border-border-soft"
+                        className="relative group block aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-muted"
                       >
                         {isEarlyAccess ? (
                           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black p-8 text-center">
@@ -291,13 +291,13 @@ export default async function Home() {
                                 className="mx-auto opacity-90"
                               />
                               <div className="space-y-3">
-                                <div className="inline-block bg-brand-gold px-4 py-2 text-sm font-bold uppercase tracking-[0.25em] text-brand-dark">
+                                <div className="inline-block bg-brand-gold px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] text-brand-dark">
                                   Members Only
                                 </div>
-                                <p className="text-sm uppercase tracking-[0.25em] text-white font-semibold">
+                                <p className="text-sm uppercase tracking-[0.12em] text-white font-semibold">
                                   New Exclusive Listing
                                 </p>
-                                <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                                <p className="text-xs uppercase tracking-[0.1em] text-white/60">
                                   10 Minutes Early Access
                                 </p>
                               </div>
@@ -311,12 +311,12 @@ export default async function Home() {
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                           />
                         ) : (
-                          <div className="flex h-full items-center justify-center text-xs uppercase tracking-[0.35em] text-text-muted">No Imagery</div>
+                          <div className="flex h-full items-center justify-center text-xs uppercase tracking-[0.18em] text-text-muted">No Imagery</div>
                         )}
                       </Link>
 
                       {/* Specifics Box */}
-                      <div className="grid grid-cols-2 gap-4 border border-border-soft bg-page-alt p-4 sm:p-5">
+                      <div className="grid grid-cols-2 gap-4 bg-page-alt p-4 sm:p-5">
                         <SpecRow label="Engine" value={listing.engine || "—"} />
                         <SpecRow label="Transmission" value={listing.transmission || "—"} />
                         <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} mi` : "—"} />
@@ -332,11 +332,11 @@ export default async function Home() {
           </div>
 
           {/* Grid Listings */}
-          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 pt-12 border-t border-border-soft/30">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 pt-12">
             {cardListings.length > 0 ? (
               cardListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
             ) : largeListings.length === 0 ? (
-              <div className="col-span-full border border-dashed border-border-strong px-6 py-12 text-center text-sm uppercase tracking-[0.35em] text-text-muted">
+              <div className="col-span-full px-6 py-12 text-center text-sm uppercase tracking-[0.18em] text-text-muted">
                 Listings return shortly. Preparing the next showcase.
               </div>
             ) : null}

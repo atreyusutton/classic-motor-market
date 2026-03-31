@@ -9,7 +9,7 @@ export function MainNav({ links }: { links: NavLink[] }) {
   const pathname = usePathname()
 
   return (
-    <nav className="hidden items-center gap-8 text-[0.75rem] font-semibold uppercase tracking-[0.4em] text-brand-dark lg:flex">
+    <nav className="hidden items-center gap-8 text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-brand-dark lg:flex">
       {links.map((link) => (
         <Link
           key={link.href}

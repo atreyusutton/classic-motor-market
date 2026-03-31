@@ -53,7 +53,7 @@ export default async function BrowsePage() {
         <div className="flex flex-col gap-4 border-b border-border-soft pb-6">
           <div className="space-y-2">
             <h1 className="font-serif text-4xl text-brand-dark">Classic Motor Market Catalog</h1>
-            <p className="text-xs uppercase tracking-[0.35em] text-text-muted">
+            <p className="text-xs uppercase tracking-[0.18em] text-text-muted">
               Become a member to view listings as they go live. Non-members can see the full listing after 10 minutes.
             </p>
           </div>
@@ -62,12 +62,12 @@ export default async function BrowsePage() {
         <div className="space-y-12">
           {/* Active Listings Section */}
           <div className="space-y-6">
-            <h2 className="font-serif text-2xl text-brand-dark border-b border-border-soft pb-3">Available Vehicles</h2>
+            <h2 className="font-serif text-2xl text-brand-dark pb-3">Available Vehicles</h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {activeListings.length > 0 ? (
                 activeListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
               ) : (
-                <div className="col-span-full border border-dashed border-border-strong px-6 py-12 text-center text-xs uppercase tracking-[0.35em] text-text-muted">
+                <div className="col-span-full px-6 py-12 text-center text-xs uppercase tracking-[0.18em] text-text-muted">
                   No vehicles available. New consignments arrive shortly.
                 </div>
               )}
@@ -77,7 +77,7 @@ export default async function BrowsePage() {
           {/* Sold Listings Section */}
           {soldListings.length > 0 && (
             <div className="space-y-6">
-              <h2 className="font-serif text-2xl text-brand-dark border-b border-border-soft pb-3">Recently Sold</h2>
+              <h2 className="font-serif text-2xl text-brand-dark pb-3">Recently Sold</h2>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {soldListings.map((listing) => (
                   <ListingCard key={listing.id} listing={listing} />
