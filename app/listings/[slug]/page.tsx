@@ -171,7 +171,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
           </div>
 
-          <aside className="space-y-5 sm:space-y-6 bg-page-alt p-4 sm:p-6 lg:order-last">
+          <aside className="space-y-5 sm:space-y-6 bg-page-alt p-4 sm:p-6 lg:order-last lg:sticky lg:top-20 lg:self-start">
             <div>
               <p className="font-serif text-base sm:text-lg text-brand-dark">{listing.year} {listing.make} {listing.model}</p>
               <p className="font-serif text-2xl sm:text-3xl font-bold text-brand-dark">{price}</p>
