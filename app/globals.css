@@ -8,7 +8,7 @@
   --font-serif: var(--font-roboto-slab);
   --font-display: var(--font-abril-fatface);
   --color-page: #f3f0dc;
-  --color-page-alt: #e9e0b8;
+  --color-page-alt: #eee8ca;
   --color-brand-dark: #164650;
   --color-brand-gold: #e3c24a;
   --color-text-main: #2a2a2a;
@@ -22,9 +22,9 @@
   --color-foreground: #2a2a2a;
   --color-primary: #164650;
   --color-primary-foreground: #f5f5f5;
-  --color-secondary: #e9e0b8;
+  --color-secondary: #eee8ca;
   --color-secondary-foreground: #164650;
-  --color-muted: #e9e0b8;
+  --color-muted: #eee8ca;
   --color-muted-foreground: #6b6b6b;
   --color-border: #d7cfac;
   --color-accent: #e3c24a;

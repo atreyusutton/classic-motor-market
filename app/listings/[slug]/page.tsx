@@ -96,9 +96,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
   const identifier = listing.vehicleIdentifier || ""
   const displayIdentifier = canViewIdentifier
     ? identifier || "N/A"
-    : identifier
-    ? `${identifier.slice(0, 4)}••••${identifier.slice(-4)}`
-    : "Members only"
+    : "Sign In to See VIN"
   const isSold = listing.listingStatus === 'sold'
 
   const coverImage = listing.media.find((m: any) => m.isCover) || listing.media[0]
@@ -146,9 +144,17 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} miles` : "—"} />
               <SpecRow label="Location" value={listing.location || "Private"} />
               <SpecRow label="Condition" value={conditionLabel || "—"} />
-              <SpecRow label="Identifier" value={displayIdentifier} />
+              <SpecRow label="VIN" value={displayIdentifier} />
             </div>
 
+            <NarrativeCard
+              title="Story"
+              body={listing.vehicleHistory || "Seller has not provided a detailed story yet."}
+            />
+            <NarrativeCard
+              title="Maintenance & Restoration"
+              body={listing.maintenanceHistory || "Routine maintenance information will be supplied upon request."}
+            />
             <NarrativeCard
               title="Options & Features"
               body={listing.optionsAndFeatures || "Seller did not include additional options or notable equipment."}
@@ -156,14 +162,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             <NarrativeCard
               title="Modifications & Originality"
               body={listing.modifications || "No modifications reported—believed to retain its stock specification."}
-            />
-            <NarrativeCard
-              title="Provenance & Story"
-              body={listing.vehicleHistory || "Seller has not provided a detailed provenance yet."}
-            />
-            <NarrativeCard
-              title="Maintenance & Restoration"
-              body={listing.maintenanceHistory || "Routine maintenance information will be supplied upon request."}
             />
 
             <div className="flex flex-wrap gap-3">
@@ -183,12 +181,10 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          <aside className="space-y-5 sm:space-y-6 bg-page-alt p-4 sm:p-6 order-first lg:order-last">
+          <aside className="space-y-5 sm:space-y-6 bg-page-alt p-4 sm:p-6 lg:order-last">
             <div>
-              <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] text-text-muted">
-                {isSold ? 'Listing Price' : 'Acquire This Vehicle'}
-              </p>
-              <p className="font-serif text-2xl sm:text-3xl text-brand-dark">{price}</p>
+              <p className="font-serif text-base sm:text-lg text-brand-dark">{listing.year} {listing.make} {listing.model}</p>
+              <p className="font-serif text-2xl sm:text-3xl font-bold text-brand-dark">{price}</p>
               {isSold && (
                 <div className="mt-3 rounded-md bg-red-50 px-3 py-2">
                   <p className="text-sm font-bold text-red-600 uppercase tracking-[0.1em]">Vehicle Sold</p>
@@ -197,19 +193,19 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
             <div className="space-y-3">
               {isSold ? (
-                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" disabled variant="secondary">
+                <Button className="w-full" disabled variant="secondary">
                   No Longer Available
                 </Button>
               ) : isOwner ? (
-                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" asChild>
+                <Button className="w-full" asChild>
                   <Link href="/account/listings">View My Listings</Link>
                 </Button>
               ) : !isLoggedIn ? (
-                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" asChild>
+                <Button className="w-full" asChild>
                   <Link href="/login">Contact Seller</Link>
                 </Button>
               ) : !isMember ? (
-                <Button className="w-full text-base sm:text-lg h-11 sm:h-12" size="lg" asChild>
+                <Button className="w-full" asChild>
                   <Link href="/account/billing">Contact Seller</Link>
                 </Button>
               ) : (
@@ -221,7 +217,9 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               )}
               {!isSold && <WatchlistButton listingId={listing.id} initialSaved={isSaved} isLoggedIn={isLoggedIn} />}
               <ShareButton title={`${listing.year} ${listing.make} ${listing.model}`} />
-              <ReportButton listingId={listing.id} />
+              <div className="text-center">
+                <ReportButton listingId={listing.id} />
+              </div>
             </div>
             <Separator />
             <div className="space-y-2">
