@@ -261,7 +261,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
 function SpecRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-border-soft pb-3 last:border-none last:pb-0">
+    <div className="flex flex-col gap-1 border-b border-border-soft pb-3">
       <span className="text-[0.55rem] text-text-muted">{label}</span>
       <span className="font-serif text-base normal-case tracking-normal text-brand-dark">{value}</span>
     </div>
