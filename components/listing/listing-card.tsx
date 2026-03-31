@@ -78,7 +78,7 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
               <p className="text-xs uppercase tracking-[0.08em] font-bold text-brand-dark">
                 {[
                   listing.mileage ? `${Math.round(listing.mileage / 1000)}k mi` : null,
-                  listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed/i, "$1 sp.").replace(/manual/i, "").replace(/automatic/i, "auto").trim() : null
+                  listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed\s*manual/i, "$1 sp. Manual").replace(/(\d+)[- ]?speed\s*automatic/i, "$1 sp. auto").replace(/(\d+)[- ]?speed/i, "$1 sp.").trim() : null
                 ].filter(Boolean).join(" · ")}
               </p>
             )}
