@@ -3,10 +3,7 @@ import Image from "next/image"
 import { prisma } from "@/lib/prisma"
 import { notFound, redirect } from "next/navigation"
 import { auth } from "@/auth"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Info, Clock } from "lucide-react"
 import { ContactSellerDialog } from "@/components/listing/contact-seller-dialog"
 import { WatchlistButton } from "@/components/listing/watchlist-button"
 import { ShareButton } from "@/components/listing/share-button"
@@ -145,6 +142,13 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               <SpecRow label="Location" value={listing.location || "Private"} />
               <SpecRow label="Condition" value={conditionLabel || "—"} />
               <SpecRow label="VIN" value={displayIdentifier} />
+              <SpecRow label="Title" value={
+                listing.titleStatus
+                  ? `${listing.titleStatus.charAt(0).toUpperCase() + listing.titleStatus.slice(1)} Title${listing.carfaxAvailable ? " with Carfax" : ""}`
+                  : listing.carfaxAvailable
+                    ? "Carfax Available"
+                    : "—"
+              } />
             </div>
 
             <NarrativeCard
@@ -164,21 +168,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
               body={listing.modifications || "No modifications reported—believed to retain its stock specification."}
             />
 
-            <div className="flex flex-wrap gap-3">
-              {listing.titleStatus && (
-                <Badge className="rounded-none bg-transparent text-brand-dark">
-                  Title: {listing.titleStatus}
-                </Badge>
-              )}
-              {listing.carfaxAvailable && (
-                <Badge className="rounded-none bg-transparent text-brand-dark">
-                  Carfax Available
-                </Badge>
-              )}
-              {!listing.titleStatus && !listing.carfaxAvailable && (
-                <span className="text-xs uppercase tracking-[0.18em] text-text-muted">Documentation pending</span>
-              )}
-            </div>
           </div>
 
           <aside className="space-y-5 sm:space-y-6 bg-page-alt p-4 sm:p-6 lg:order-last">
@@ -249,9 +238,9 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
       <section className="bg-page-alt py-12 sm:py-16">
         <SiteContainer>
           <div className="flex flex-col gap-4 pb-6 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
-            <h2 className="font-serif text-2xl sm:text-3xl text-brand-dark">More automobiles from the clubhouse</h2>
+            <h2 className="font-serif text-2xl sm:text-3xl text-brand-dark">More Vehicles</h2>
             <Button variant="ghost" asChild className="w-full sm:w-auto">
-              <Link href="/listings">Return to catalogue</Link>
+              <Link href="/listings">Return to Listings</Link>
             </Button>
           </div>
           <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -280,12 +269,10 @@ function SpecRow({ label, value }: { label: string; value: string }) {
 
 function NarrativeCard({ title, body }: { title: string; body: string }) {
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="font-serif text-base sm:text-lg uppercase tracking-[0.18em] sm:tracking-[0.2em] text-brand-dark">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="text-xs sm:text-sm leading-relaxed text-text-main whitespace-pre-wrap">{body}</CardContent>
-    </Card>
+    <div className="bg-card px-5 py-4 space-y-2">
+      <h3 className="font-sans text-sm sm:text-base font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-brand-dark">{title}</h3>
+      <p className="font-serif text-xs sm:text-sm leading-relaxed text-text-main whitespace-pre-wrap">{body}</p>
+    </div>
   )
 }
 
