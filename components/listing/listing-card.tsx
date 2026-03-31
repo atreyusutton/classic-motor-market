@@ -73,7 +73,10 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
           </h3>
           {!isEarlyAccess && (
             <p className="text-[0.65rem] uppercase tracking-[0.08em] text-text-muted">
-              {[listing.mileage ? `${listing.mileage.toLocaleString()} mi` : null, listing.transmission].filter(Boolean).join(" · ")}
+              {[
+                listing.mileage ? `${Math.round(listing.mileage / 1000)}k mi` : null,
+                listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed/i, "$1 sp.").replace(/manual/i, "").replace(/automatic/i, "auto").trim() : null
+              ].filter(Boolean).join(" · ")}
             </p>
           )}
         </div>
