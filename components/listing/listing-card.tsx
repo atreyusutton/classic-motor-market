@@ -65,30 +65,31 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
           </div>
         )}
       </div>
-      <div className="flex flex-1 flex-col justify-between space-y-3 px-5 py-5">
+      <div className="flex flex-1 flex-col px-5 py-5">
         <div>
-          <h3 className="font-serif text-xl text-brand-dark group-hover:text-brand-gold transition-colors">
+          <h3 className="font-serif text-2xl text-brand-dark group-hover:text-brand-gold transition-colors">
             {listing.year} {listing.make} {listing.model}
-            {isSold && !isEarlyAccess && <span className="text-red-600 font-bold"> SOLD</span>}
           </h3>
-        </div>
-        <div className="flex items-end justify-between">
-          <div className="space-y-1">
-            {!isEarlyAccess && (
-              <p className="text-xs uppercase tracking-[0.08em] font-bold text-brand-dark">
-                {[
-                  listing.mileage ? `${Math.round(listing.mileage / 1000)}k mi` : null,
-                  listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed\s*manual/i, "$1 sp. Manual").replace(/(\d+)[- ]?speed\s*automatic/i, "$1 sp. auto").replace(/(\d+)[- ]?speed/i, "$1 sp.").trim() : null
-                ].filter(Boolean).join(" · ")}
-              </p>
-            )}
-            <p className="text-[0.7rem] uppercase tracking-[0.08em] font-semibold text-text-muted">
-              {isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")}
+          {!isEarlyAccess && (
+            <p className="mt-1 text-sm uppercase tracking-[0.08em] font-bold text-brand-dark">
+              {[
+                listing.mileage ? `${Math.round(listing.mileage / 1000)}k mi` : null,
+                listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed\s*manual/i, "$1 sp. Manual").replace(/(\d+)[- ]?speed\s*automatic/i, "$1 sp. auto").replace(/(\d+)[- ]?speed/i, "$1 sp.").trim() : null,
+                listing.location || "Private"
+              ].filter(Boolean).join(" / ")}
             </p>
-          </div>
-          {!isEarlyAccess && <span className="font-serif text-xl text-brand-dark">{price}</span>}
+          )}
           {isEarlyAccess && (
-            <span className="text-xs uppercase tracking-[0.1em] font-bold text-brand-gold">
+            <p className="mt-1 text-sm uppercase tracking-[0.08em] font-semibold text-text-muted">
+              Member Exclusive
+            </p>
+          )}
+        </div>
+        <div className="mt-auto pt-3">
+          {!isEarlyAccess ? (
+            <p className="font-serif text-2xl font-bold text-brand-dark">{price}</p>
+          ) : (
+            <span className="text-sm uppercase tracking-[0.1em] font-bold text-brand-gold">
               Join Now
             </span>
           )}

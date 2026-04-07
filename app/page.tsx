@@ -7,6 +7,7 @@ import { auth } from "@/auth"
 import { SiteContainer } from "@/components/layout/site-container"
 import { cn, getCloudflareImageUrl, formatCurrency, generateListingSlug } from "@/lib/utils"
 import { shouldShowAsPlaceholder, createPlaceholderListing } from "@/lib/listing-utils"
+import { MemberListingsBanner } from "@/components/listing/member-listings-banner"
 
 export const dynamic = "force-dynamic"
 
@@ -21,9 +22,9 @@ const membershipBenefits = [
 
 function SpecRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-border-soft pb-2 last:border-none last:pb-0">
-      <span className="text-[0.55rem] uppercase tracking-[0.1em] font-bold text-text-muted">{label}</span>
-      <span className="font-serif text-sm text-brand-dark font-medium leading-tight">{value}</span>
+    <div className="flex flex-col gap-1 border-b border-border-soft pb-3">
+      <span className="text-[0.5rem] sm:text-xs text-text-muted">{label}</span>
+      <span className="font-serif text-sm sm:text-base normal-case tracking-normal text-brand-dark">{value}</span>
     </div>
   )
 }
@@ -207,26 +208,11 @@ export default async function Home() {
         </SiteContainer>
       </section>
 
+      <MemberListingsBanner />
+
       <section className="bg-page py-12 sm:py-16 md:py-20 border-t border-border-soft/30">
         <SiteContainer className="space-y-12 sm:space-y-20">
-          <div className="flex flex-col gap-4 pb-6 sm:pb-8 text-center lg:flex-row lg:items-end lg:justify-between lg:text-left">
-            <div className="space-y-2">
-              <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark">
-                Member Listings
-              </p>
-              <h4 className="font-serif text-2xl sm:text-3xl text-brand-dark px-2 sm:px-0">
-                Hand-picked vehicles presently inside the showroom
-              </h4>
-              <p className="text-xs sm:text-sm uppercase tracking-[0.15em] sm:tracking-[0.18em] text-text-muted">
-                One-column on mobile, three on desktop. No clutter, just cars.
-              </p>
-            </div>
-            <Button variant="ghost" asChild className="w-full sm:w-auto">
-              <Link href="/listings">View the catalogue</Link>
-            </Button>
-          </div>
-
-          {/* Large Listings */}
+{/* Large Listings */}
           <div className="space-y-12 sm:space-y-24">
             {largeListings.map((listing, index) => {
               const coverImage = listing.media.find((m) => m.isCover) || listing.media[0]
@@ -239,7 +225,7 @@ export default async function Home() {
                   className="bg-card p-6 sm:p-8 md:p-10 shadow-sm"
                 >
                   <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-start">
-                    <div className={cn("space-y-8", index % 2 === 1 ? "lg:order-last" : "")}>
+                    <div className="space-y-8">
                       <div className="space-y-2">
                         <p className="text-[0.65rem] sm:text-xs uppercase tracking-[0.1em] text-brand-gold font-semibold">
                           {isEarlyAccess ? "Member Exclusive Preview" : "Featured Showcase"}
@@ -314,13 +300,15 @@ export default async function Home() {
                       </Link>
 
                       {/* Specifics Box */}
-                      <div className="grid grid-cols-2 gap-4 bg-page-alt p-4 sm:p-5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-page-alt p-4 sm:p-6 text-sm sm:text-base uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark/80">
                         <SpecRow label="Engine" value={listing.engine || "—"} />
                         <SpecRow label="Transmission" value={listing.transmission || "—"} />
-                        <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} mi` : "—"} />
-                        <SpecRow label="Color" value={listing.exteriorColor || "—"} />
+                        <SpecRow
+                          label="Exterior / Interior"
+                          value={`${listing.exteriorColor || "—"} / ${listing.interiorColorMaterial || "—"}`}
+                        />
+                        <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} miles` : "—"} />
                         <SpecRow label="Location" value={isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")} />
-                        <SpecRow label="Price" value={isEarlyAccess ? "Join to View" : formatCurrency(listing.askingPrice)} />
                       </div>
                     </div>
                   </div>

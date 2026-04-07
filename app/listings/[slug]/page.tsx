@@ -14,6 +14,7 @@ import { SiteContainer } from "@/components/layout/site-container"
 import { ListingCard } from "@/components/listing/listing-card"
 import { Button } from "@/components/ui/button"
 import { shouldShowAsPlaceholder } from "@/lib/listing-utils"
+import { MemberListingsBanner } from "@/components/listing/member-listings-banner"
 
 const CONDITION_LABELS = {
   show_car: "Show car",
@@ -99,16 +100,14 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="bg-page">
-      <SiteContainer className="space-y-8 sm:space-y-10 py-8 sm:py-12 md:py-16">
+      <SiteContainer className="space-y-2 pt-6 sm:pt-8 pb-4 sm:pb-6">
         {/* Title + Price */}
-        <div className="flex items-baseline justify-between gap-4">
+        <div className="flex items-baseline justify-between gap-4 mb-3 sm:mb-4">
           <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-brand-dark">
             {listing.year} {listing.make} {listing.model}
-            {isSold && <span className="text-red-600"> SOLD</span>}
           </h1>
           <span className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-brand-dark shrink-0">{price}</span>
         </div>
-        <Separator className="border-border-soft" />
 
         {/* Hero Image */}
         {coverImage && (
@@ -129,9 +128,9 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         )}
 
         {/* All Info */}
-        <div className="grid gap-8 sm:gap-10 lg:grid-cols-[2fr_1fr]">
+        <div className="grid gap-8 sm:gap-10 lg:grid-cols-[2fr_1fr] mt-6 sm:mt-8">
           <div className="space-y-6 sm:space-y-8">
-            <div className="grid gap-4 bg-page-alt p-4 sm:p-6 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark/80 grid-cols-1 sm:grid-cols-2">
+            <div className="grid gap-4 bg-page-alt p-4 sm:p-6 text-sm sm:text-base uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark/80 grid-cols-1 sm:grid-cols-2">
               <SpecRow label="Engine" value={listing.engine || "—"} />
               <SpecRow label="Transmission" value={listing.transmission || "—"} />
               <SpecRow
@@ -172,18 +171,13 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
           <aside className="space-y-5 sm:space-y-6 bg-page-alt p-4 sm:p-6 lg:order-last lg:sticky lg:top-20 lg:self-start">
             <div>
-              <p className="font-serif text-base sm:text-lg text-brand-dark">{listing.year} {listing.make} {listing.model}</p>
+              <p className="font-serif text-xl sm:text-2xl font-bold text-brand-dark">{listing.year} {listing.make} {listing.model}</p>
               <p className="font-serif text-2xl sm:text-3xl font-bold text-brand-dark">{price}</p>
-              {isSold && (
-                <div className="mt-3 rounded-md bg-red-50 px-3 py-2">
-                  <p className="text-sm font-bold text-red-600 uppercase tracking-[0.1em]">Vehicle Sold</p>
-                </div>
-              )}
             </div>
             <div className="space-y-3">
               {isSold ? (
-                <Button className="w-full" disabled variant="secondary">
-                  No Longer Available
+                <Button className="w-full bg-red-600 text-white hover:bg-red-600 cursor-default" disabled>
+                  Vehicle Sold
                 </Button>
               ) : isOwner ? (
                 <Button className="w-full" asChild>
@@ -235,15 +229,13 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         )}
       </SiteContainer>
 
+      <div className="pt-10 sm:pt-14">
+        <MemberListingsBanner />
+      </div>
+
       <section className="bg-page-alt py-12 sm:py-16">
         <SiteContainer>
-          <div className="flex flex-col gap-4 pb-6 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
-            <h2 className="font-serif text-2xl sm:text-3xl text-brand-dark">More Vehicles</h2>
-            <Button variant="ghost" asChild className="w-full sm:w-auto">
-              <Link href="/listings">Return to Listings</Link>
-            </Button>
-          </div>
-          <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             {relatedListings.length > 0 ? (
               relatedListings.map((related) => <ListingCard key={related.id} listing={related} />)
             ) : (
@@ -261,8 +253,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 function SpecRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1 border-b border-border-soft pb-3">
-      <span className="text-[0.55rem] text-text-muted">{label}</span>
-      <span className="font-serif text-base normal-case tracking-normal text-brand-dark">{value}</span>
+      <span className="text-[0.5rem] sm:text-xs text-text-muted">{label}</span>
+      <span className="font-serif text-sm sm:text-base normal-case tracking-normal text-brand-dark">{value}</span>
     </div>
   )
 }
@@ -270,9 +262,9 @@ function SpecRow({ label, value }: { label: string; value: string }) {
 function NarrativeCard({ title, body }: { title: string; body: string }) {
   return (
     <div className="bg-card px-5 py-4 space-y-3">
-      <h3 className="font-sans text-sm sm:text-base font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-brand-dark">{title}</h3>
+      <h3 className="font-sans text-base sm:text-lg font-bold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-brand-dark">{title}</h3>
       <Separator className="border-border-soft" />
-      <p className="font-serif text-xs sm:text-sm leading-relaxed text-text-main whitespace-pre-wrap">{body}</p>
+      <p className="font-serif text-sm sm:text-base leading-relaxed text-text-main whitespace-pre-wrap">{body}</p>
     </div>
   )
 }

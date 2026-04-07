@@ -31,7 +31,7 @@ export function Footer() {
               <div className="relative h-10 w-10">
                 <Image src="/assets/cmm-logo-white.png" alt="Classic Motor Market" fill className="object-contain" />
               </div>
-              <div className="font-sans text-lg font-bold uppercase tracking-[0.1em]">Classic Motor Market</div>
+              <div className="font-serif text-lg font-bold uppercase tracking-[0.1em]">Classic Motor Market</div>
             </div>
             <p className="font-serif text-sm text-text-inverse/70 max-w-md leading-relaxed">
               A member driven club for European motoring enthusiasts. A curated marketplace, member to member sales,
