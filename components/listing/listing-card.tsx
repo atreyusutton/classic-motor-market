@@ -71,13 +71,16 @@ export function ListingCard({ listing, isPlaceholder = false }: ListingCardProps
             {listing.year} {listing.make} {listing.model}
           </h3>
           {!isEarlyAccess && (
-            <p className="mt-1 text-sm uppercase tracking-[0.08em] font-bold text-brand-dark">
-              {[
-                listing.mileage ? `${Math.round(listing.mileage / 1000)}k mi` : null,
-                listing.transmission ? listing.transmission.replace(/(\d+)[- ]?speed\s*manual/i, "$1 sp. Manual").replace(/(\d+)[- ]?speed\s*automatic/i, "$1 sp. auto").replace(/(\d+)[- ]?speed/i, "$1 sp.").trim() : null,
-                listing.location || "Private"
-              ].filter(Boolean).join(" / ")}
-            </p>
+            <div className="mt-1 space-y-0.5">
+              {listing.mileage != null && (
+                <p className="text-sm uppercase tracking-[0.08em] font-bold text-brand-dark">
+                  {Math.round(listing.mileage / 1000)}k miles
+                </p>
+              )}
+              <p className="text-sm uppercase tracking-[0.08em] font-bold text-brand-dark">
+                {listing.location || "Private"}
+              </p>
+            </div>
           )}
           {isEarlyAccess && (
             <p className="mt-1 text-sm uppercase tracking-[0.08em] font-semibold text-text-muted">

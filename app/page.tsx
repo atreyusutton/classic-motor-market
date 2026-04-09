@@ -6,19 +6,11 @@ import { ListingCard } from "@/components/listing/listing-card"
 import { auth } from "@/auth"
 import { SiteContainer } from "@/components/layout/site-container"
 import { cn, getCloudflareImageUrl, formatCurrency, generateListingSlug } from "@/lib/utils"
+import { MembershipBenefits } from "@/components/membership-benefits"
 import { shouldShowAsPlaceholder, createPlaceholderListing } from "@/lib/listing-utils"
 import { MemberListingsBanner } from "@/components/listing/member-listings-banner"
 
 export const dynamic = "force-dynamic"
-
-const membershipBenefits = [
-  "Discreet seller contact via relay",
-  "10-minute early access to new listings",
-  "Full VIN visibility for due diligence",
-  "First listing included with membership",
-  "Purchase vehicles without auction pressure",
-  "Inspect and test drive on your schedule",
-]
 
 function SpecRow({ label, value }: { label: string; value: string }) {
   return (
@@ -105,21 +97,21 @@ export default async function Home() {
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] text-brand-gold italic drop-shadow-sm">
               Drive your next adventure...
             </h1>
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.1em] text-white drop-shadow-md">
+            <p className="font-serif text-lg sm:text-xl md:text-2xl leading-relaxed text-white drop-shadow-md">
               Classic Motor Market is an affordable member-driven sales platform for European enthusiast vehicles.
             </p>
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.1em] text-white drop-shadow-md">
+            <p className="font-serif text-lg sm:text-xl md:text-2xl leading-relaxed text-white drop-shadow-md">
               Built by car enthusiasts for car enthusiasts.
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto px-2">
-            <Button asChild size="lg" className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] bg-brand-dark text-white border-white transition-all duration-300 hover:bg-brand-dark/80 hover:brightness-110 hover:shadow-lg">
+            <Button asChild size="lg" className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] bg-transparent text-white border border-white transition-all duration-300 hover:bg-white/15 hover:shadow-lg">
               <Link href="/listings">Browse Listings</Link>
             </Button>
             <Button
               asChild
               size="lg"
-              className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] bg-page text-black border-black transition-all duration-300 hover:bg-page hover:brightness-90 hover:shadow-lg"
+              className="h-9 sm:h-12 px-4 sm:px-10 text-[0.6rem] sm:text-base min-w-[130px] sm:min-w-[200px] bg-transparent text-white border border-white transition-all duration-300 hover:bg-white/15 hover:shadow-lg"
             >
               <Link href="/sell">List a Vehicle</Link>
             </Button>
@@ -129,82 +121,68 @@ export default async function Home() {
 
       <div className="h-1 w-full bg-white/60" />
 
-      <section className="relative h-[32rem] w-full overflow-hidden">
+      <section className="relative min-h-[32rem] w-full overflow-hidden">
         <Image
           src="/assets/hero-line.png"
           alt="Lifestyle imagery"
           fill
-          className="object-cover object-[center_20%] saturate-50"
+          className="object-cover object-[center_20%] saturate-50 brightness-[0.45]"
         />
-      </section>
-
-      <section className="bg-page py-12 sm:py-16 md:py-20">
-        <SiteContainer className="grid gap-8 sm:gap-12">
-          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
+        <SiteContainer className="relative flex min-h-[32rem] flex-col items-center justify-center gap-6 sm:gap-8 px-6 sm:px-8 text-center text-white">
+          <div className="flex items-center gap-3 sm:gap-5">
             <Image
               src="/assets/ff-logo.png"
               alt="Fuelfed logo"
               width={140}
               height={140}
-              className="h-16 sm:h-20 w-auto"
+              className="h-14 sm:h-20 w-auto"
             />
-            <div className="h-px w-12 sm:w-16 bg-border-strong sm:h-16 sm:w-px" />
+            <div className="h-12 sm:h-16 w-px bg-white/40" />
             <Image
-              src="/assets/cmm-logo-blue.png"
+              src="/assets/cmm-logo-white.png"
               alt="Classic Motor Market logo"
               width={140}
               height={140}
-              className="h-16 sm:h-20 w-auto"
+              className="h-14 sm:h-20 w-auto"
             />
           </div>
-          <div className="space-y-4 sm:space-y-5 text-sm leading-relaxed text-brand-dark">
-            <p className="font-serif text-xl sm:text-2xl text-brand-dark">
-              From the Founders of the classic European car club, Fuelfed, comes a new sales platform for classic and enthusiast European vehicles. Take back control of the sales process with Classic Motor Market.
-            </p>
+          <p className="font-serif text-lg sm:text-xl md:text-2xl max-w-3xl leading-relaxed text-white drop-shadow-md">
+            From the Founders of the classic European car club, Fuelfed, comes a new sales platform for classic and enthusiast European vehicles. Take back control of the sales process with Classic Motor Market.
+          </p>
+        </SiteContainer>
+      </section>
 
-            <div className="space-y-4 text-brand-dark">
-              <p>
-                <span className="font-bold text-brand-dark">Privacy and Security.</span> Avoid scammers and deal with
-                real people. Only approved Classic Motor Market members can contact sellers.
-              </p>
-              <p>
-                <span className="font-bold text-brand-dark">Cost Effective.</span> CMM members pay only $29 per listing.
-                No high fees or percentage commissions. All sales are completed offline with other approved CMM members.
-              </p>
-              <p>
-                <span className="font-bold text-brand-dark">Specialized listing process.</span> Makes it fast and easy to
-                create high quality listings. No waiting weeks for a stressful auction listing to go live.
-              </p>
-              <p>
-                <span className="font-bold text-brand-dark">
-                Only members can see the VIN.</span>The VIN never appears in online searches and is protected from scammers.
-              </p>
-            </div>
-            <Button asChild className="uppercase tracking-[0.18em]">
-              <Link href="/sell">List Your Vehicle</Link>
-            </Button>
+      {/* Spacer */}
+      <div className="h-6 sm:h-10 bg-white" />
+
+      {/* Benefits Banner — tan background matching listings */}
+      <section className="bg-page py-10 sm:py-14">
+        <SiteContainer>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Image
+              src="/assets/cmm-logo-blue.png"
+              alt="Classic Motor Market logo"
+              width={80}
+              height={80}
+              className="h-12 sm:h-16 w-auto flex-shrink-0"
+            />
+            <h2 className="font-serif text-xl sm:text-2xl md:text-3xl text-brand-dark">
+              Benefits of becoming a Classic Motor Market Member
+            </h2>
           </div>
         </SiteContainer>
       </section>
 
-      <section className="bg-page-alt py-12 sm:py-16 text-center">
-        <SiteContainer className="space-y-5 sm:space-y-6">
-          <p className="font-serif text-[0.65rem] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark">
-            Membership · $49 yearly
-          </p>
-          <h3 className="font-serif text-2xl sm:text-3xl text-brand-dark px-4">
-          Why join a Classic Motor Market as a buyer?
-          </h3>
-          <div className="grid gap-3 sm:gap-4 text-[0.65rem] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.18em] text-brand-dark/80 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {membershipBenefits.map((benefit) => (
-              <div key={benefit} className="bg-card px-4 py-5 sm:py-6">
-                {benefit}
-              </div>
-            ))}
+      {/* Accordion + CTA — white background */}
+      <section className="bg-white py-10 sm:py-14">
+        <SiteContainer className="space-y-8 sm:space-y-10">
+          <MembershipBenefits />
+
+          <div className="pt-2">
+            <Button asChild className="w-full sm:w-auto h-12 sm:h-14 px-8 sm:px-10 text-sm sm:text-base bg-brand-gold text-brand-dark hover:bg-brand-gold/90 uppercase tracking-[0.18em] font-semibold">
+              <Link href="/register">Start your Membership</Link>
+            </Button>
           </div>
-          <Button asChild variant="secondary" className="w-full sm:w-auto h-11 sm:h-12">
-            <Link href="/register">Become a Member</Link>
-          </Button>
         </SiteContainer>
       </section>
 
@@ -303,10 +281,8 @@ export default async function Home() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-page-alt p-4 sm:p-6 text-sm sm:text-base uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark/80">
                         <SpecRow label="Engine" value={listing.engine || "—"} />
                         <SpecRow label="Transmission" value={listing.transmission || "—"} />
-                        <SpecRow
-                          label="Exterior / Interior"
-                          value={`${listing.exteriorColor || "—"} / ${listing.interiorColorMaterial || "—"}`}
-                        />
+                        <SpecRow label="Exterior" value={listing.exteriorColor || "—"} />
+                        <SpecRow label="Interior" value={listing.interiorColorMaterial || "—"} />
                         <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} miles` : "—"} />
                         <SpecRow label="Location" value={isEarlyAccess ? "Member Exclusive" : (listing.location || "Private")} />
                       </div>
@@ -326,6 +302,13 @@ export default async function Home() {
                 Listings return shortly. Preparing the next showcase.
               </div>
             ) : null}
+          </div>
+
+          {/* Browse Vehicles CTA */}
+          <div className="flex justify-center pt-8 sm:pt-12">
+            <Button asChild size="lg" className="h-12 sm:h-14 px-8 sm:px-10 text-sm sm:text-base bg-brand-dark text-white hover:bg-brand-dark/90 uppercase tracking-[0.18em] font-semibold">
+              <Link href="/listings">Browse Vehicles</Link>
+            </Button>
           </div>
         </SiteContainer>
       </section>

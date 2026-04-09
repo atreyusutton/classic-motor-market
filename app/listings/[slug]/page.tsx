@@ -133,13 +133,10 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             <div className="grid gap-4 bg-page-alt p-4 sm:p-6 text-sm sm:text-base uppercase tracking-[0.1em] sm:tracking-[0.12em] text-brand-dark/80 grid-cols-1 sm:grid-cols-2">
               <SpecRow label="Engine" value={listing.engine || "—"} />
               <SpecRow label="Transmission" value={listing.transmission || "—"} />
-              <SpecRow
-                label="Exterior / Interior"
-                value={`${listing.exteriorColor || "—"} / ${listing.interiorColorMaterial || "—"}`}
-              />
+              <SpecRow label="Exterior" value={listing.exteriorColor || "—"} />
+              <SpecRow label="Interior" value={listing.interiorColorMaterial || "—"} />
               <SpecRow label="Mileage" value={listing.mileage ? `${listing.mileage.toLocaleString()} miles` : "—"} />
               <SpecRow label="Location" value={listing.location || "Private"} />
-              <SpecRow label="Condition" value={conditionLabel || "—"} />
               <SpecRow label="VIN" value={displayIdentifier} />
               <SpecRow label="Title" value={
                 listing.titleStatus

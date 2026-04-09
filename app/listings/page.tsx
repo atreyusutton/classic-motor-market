@@ -3,7 +3,6 @@ import { ListingCard } from "@/components/listing/listing-card"
 import { auth } from "@/auth"
 import { SiteContainer } from "@/components/layout/site-container"
 import { shouldShowAsPlaceholder, createPlaceholderListing } from "@/lib/listing-utils"
-import { MemberListingsBanner } from "@/components/listing/member-listings-banner"
 
 export const dynamic = "force-dynamic"
 
@@ -49,10 +48,8 @@ export default async function BrowsePage() {
   })
 
   return (
-    <div className="bg-page">
-      <MemberListingsBanner />
-
-      <SiteContainer className="space-y-10 py-12 md:py-16">
+    <div className="bg-page py-12 md:py-16">
+      <SiteContainer className="space-y-10">
         <div className="flex flex-col gap-4 border-b border-border-soft pb-6">
           <div className="space-y-2">
             <h1 className="font-serif text-4xl text-brand-dark">Classic Motor Market Catalog</h1>

@@ -16,10 +16,6 @@ import type { NavLink } from "@/types/navigation"
 
 import { SiteContainer } from "./site-container"
 
-type CtaLink = NavLink & {
-  variant?: "default" | "outline"
-}
-
 export async function Header() {
   const session = await auth()
   const isAuthed = Boolean(session?.user)
@@ -27,29 +23,18 @@ export async function Header() {
   const menuLinks: NavLink[] = [
     { label: "Browse Vehicles", href: "/listings" },
     { label: "List a Vehicle", href: "/sell" },
-    { label: "Become a Member", href: "/register" },
+    ...(!isAuthed ? [{ label: "Become a Member", href: "/register" }] : [{ label: "List a Vehicle", href: "/sell" }]),
+    { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
     isAuthed
       ? { label: session?.user?.name ?? session?.user?.email ?? "Account", href: "/account" }
       : { label: "Log In", href: "/login" },
   ]
 
-  const authLink: NavLink = isAuthed
-    ? {
-        label: session?.user?.name ?? session?.user?.email ?? "Account",
-        href: "/account",
-      }
-    : { label: "Log In", href: "/login" }
-
-  const ctaLinks: CtaLink[] = isAuthed
-    ? [
-        { label: "List Vehicle", href: "/sell", variant: "default" }, // brand blue/primary
-        { label: "Browse Vehicles", href: "/listings", variant: "outline" }, // outline (previous style)
-      ]
-    : [
-        { label: "Become a Member", href: "/register", variant: "default" }, // brand blue/primary
-        { label: "Browse Vehicles", href: "/listings", variant: "outline" }, // outline (previous style)
-      ]
+  // Always-visible CTA next to hamburger
+  const headerCta = isAuthed
+    ? { label: "List Vehicle", href: "/sell" }
+    : { label: "Become a Member", href: "/register" }
 
   return (
     <>
@@ -61,44 +46,8 @@ export async function Header() {
       </div>
       <header className="sticky top-0 left-0 right-0 z-50 border-b border-border-strong bg-white shadow-sm">
         <SiteContainer bleed className="py-2 min-[800px]:py-4 max-w-none px-3 sm:px-6">
-        <div className="flex items-center justify-between gap-1.5 sm:gap-4">
-          <div className="flex items-center gap-1.5 sm:gap-4 min-w-0 flex-1">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="h-8 w-8 sm:h-8 sm:w-8 shrink-0 rounded-full p-0 text-brand-dark transition hover:bg-brand-dark/5 hover:text-brand-gold focus-visible:ring-0 focus-visible:ring-offset-0"
-                  aria-label="Open quick links"
-                >
-                  <Menu className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-56 border border-brand-dark/20 bg-white p-2 text-brand-dark shadow-2xl ring-1 ring-brand-dark/25"
-                align="start"
-              >
-                <DropdownMenuLabel className="text-[0.65rem] uppercase tracking-[0.2em] text-brand-dark">
-                  Quick Links
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-brand-dark/30" />
-                {menuLinks.map((link) => (
-                  <DropdownMenuItem
-                    key={link.href}
-                    asChild
-                    className="text-[0.7rem] uppercase tracking-[0.18em]"
-                  >
-                    <Link
-                      href={link.href}
-                      className="flex w-full items-center justify-between gap-2 text-brand-dark"
-                    >
-                      <span>{link.label}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 text-brand-dark/70" />
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            {/* Left: Logo + site name — always visible */}
             <Link
               href="/"
               className="flex items-center gap-1.5 sm:gap-3 text-brand-dark min-w-0 flex-shrink-0"
@@ -112,37 +61,60 @@ export async function Header() {
                 className="h-7 min-[800px]:h-10 w-auto flex-shrink-0"
                 priority
               />
-              <span className="font-serif font-bold text-[0.65rem] sm:text-sm md:text-base uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.22em] whitespace-nowrap hidden min-[1080px]:inline">
+              <span className="font-serif font-bold text-[0.65rem] sm:text-sm md:text-base uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.22em] whitespace-nowrap">
                 Classic Motor Market
               </span>
             </Link>
-          </div>
 
-          <nav className="flex items-center justify-end gap-1 sm:gap-3 flex-shrink-0">
-            <Link
-              href={authLink.href}
-              className="text-[0.65rem] sm:text-xs font-bold uppercase tracking-[0.2em] text-brand-dark transition-colors hover:text-brand-gold whitespace-nowrap hidden min-[800px]:inline-block"
-            >
-              {authLink.label}
-            </Link>
-            {ctaLinks.map((cta, index) => (
+            {/* Right: CTA button + hamburger */}
+            <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
               <Button
-                key={cta.href}
                 asChild
-                variant={cta.variant ?? "default"}
-                size={index === 0 ? "default" : "sm"}
-                className="uppercase tracking-[0.12em] sm:tracking-[0.18em] text-[0.6rem] min-[800px]:text-[0.7rem] px-2 min-[800px]:px-4 h-7.5 min-[800px]:h-9 md:h-10"
+                variant="default"
+                className="hidden min-[800px]:inline-flex uppercase tracking-[0.18em] text-[0.7rem] px-4 h-9 md:h-10"
               >
-                <Link href={cta.href}>
-                  <span className="hidden min-[800px]:inline">{cta.label}</span>
-                  <span className="min-[800px]:hidden">{index === 0 ? (isAuthed ? "List" : "Join") : "Browse"}</span>
-                </Link>
+                <Link href={headerCta.href}>{headerCta.label}</Link>
               </Button>
-            ))}
-          </nav>
-        </div>
-      </SiteContainer>
-    </header>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="h-10 w-10 shrink-0 rounded-full p-0 text-brand-dark transition hover:bg-brand-dark/5 hover:text-brand-gold focus-visible:ring-0 focus-visible:ring-offset-0"
+                    aria-label="Open menu"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-56 border border-brand-dark/20 bg-white p-2 text-brand-dark shadow-2xl ring-1 ring-brand-dark/25"
+                  align="end"
+                >
+                  <DropdownMenuLabel className="text-[0.65rem] uppercase tracking-[0.2em] text-brand-dark">
+                    Menu
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-brand-dark/30" />
+                  {menuLinks.map((link) => (
+                    <DropdownMenuItem
+                      key={link.href}
+                      asChild
+                      className="text-[0.7rem] uppercase tracking-[0.18em]"
+                    >
+                      <Link
+                        href={link.href}
+                        className="flex w-full items-center justify-between gap-2 text-brand-dark"
+                      >
+                        <span>{link.label}</span>
+                        <ArrowUpRight className="h-3.5 w-3.5 text-brand-dark/70" />
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        </SiteContainer>
+      </header>
     </>
   )
 }
