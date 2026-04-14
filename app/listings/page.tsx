@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { ListingCard } from "@/components/listing/listing-card"
+import { AdSlot } from "@/components/ads/ad-slot"
 import { auth } from "@/auth"
 import { SiteContainer } from "@/components/layout/site-container"
 import { shouldShowAsPlaceholder, createPlaceholderListing } from "@/lib/listing-utils"
@@ -65,7 +66,13 @@ export default async function BrowsePage() {
             <h2 className="font-serif text-2xl text-brand-dark pb-3">Available Vehicles</h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {activeListings.length > 0 ? (
-                activeListings.map((listing) => <ListingCard key={listing.id} listing={listing} />)
+                activeListings.map((listing, idx) =>
+                  idx === 7 ? (
+                    <AdSlot key="ad-card" placement="card" />
+                  ) : (
+                    <ListingCard key={listing.id} listing={listing} />
+                  ),
+                )
               ) : (
                 <div className="col-span-full px-6 py-12 text-center text-xs uppercase tracking-[0.18em] text-text-muted">
                   No vehicles available. New consignments arrive shortly.

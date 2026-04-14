@@ -4,8 +4,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { LayoutDashboard, Users, Car, LogOut } from "lucide-react"
-import { signOut } from "@/auth"
+import { LayoutDashboard, Users, Car, CalendarDays, Megaphone } from "lucide-react"
 
 export default async function AdminLayout({
   children,
@@ -53,18 +52,19 @@ export default async function AdminLayout({
               Listings
             </Link>
           </Button>
+          <Button variant="ghost" className="w-full justify-start" asChild>
+            <Link href="/admin/events">
+              <CalendarDays className="mr-2 h-4 w-4" />
+              Events
+            </Link>
+          </Button>
+          <Button variant="ghost" className="w-full justify-start" asChild>
+            <Link href="/admin/ads">
+              <Megaphone className="mr-2 h-4 w-4" />
+              Advertising
+            </Link>
+          </Button>
         </nav>
-        <div className="absolute bottom-4 left-4 right-4">
-           <form action={async () => {
-             "use server"
-             await signOut()
-           }}>
-             <Button variant="outline" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50">
-               <LogOut className="mr-2 h-4 w-4" />
-               Sign Out
-             </Button>
-           </form>
-        </div>
       </aside>
       <main className="flex-1 p-8 overflow-y-auto">
         {children}

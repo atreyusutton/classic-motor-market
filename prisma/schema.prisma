@@ -199,6 +199,40 @@ model Session {
   @@map("sessions")
 }
 
+enum AdPlacement {
+  home
+  card
+  detail
+}
+
+model Ad {
+  id               Int         @id @default(autoincrement())
+  name             String
+  placement        AdPlacement
+  url              String
+  desktopImageId   String
+  mobileImageId    String
+  active           Boolean     @default(true)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([placement, active])
+  @@map("ads")
+}
+
+model Event {
+  id         Int      @id @default(autoincrement())
+  title      String
+  shortTitle String?
+  date       DateTime
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([active, date])
+  @@map("events")
+}
+
 model VerificationToken {
   identifier String
   token      String   @unique

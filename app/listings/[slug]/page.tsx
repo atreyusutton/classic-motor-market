@@ -12,6 +12,7 @@ import { formatCurrency, getCloudflareImageUrl } from "@/lib/utils"
 import { ListingGallery } from "@/components/listing/listing-gallery"
 import { SiteContainer } from "@/components/layout/site-container"
 import { ListingCard } from "@/components/listing/listing-card"
+import { AdSlot } from "@/components/ads/ad-slot"
 import { Button } from "@/components/ui/button"
 import { shouldShowAsPlaceholder } from "@/lib/listing-utils"
 import { MemberListingsBanner } from "@/components/listing/member-listings-banner"
@@ -224,6 +225,9 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             <ListingGallery media={listing.media} isSold={isSold} />
           </div>
         )}
+        <div className="pt-10 sm:pt-14">
+          <AdSlot placement="detail" className="mx-auto max-w-5xl" />
+        </div>
       </SiteContainer>
 
       <div className="pt-10 sm:pt-14">

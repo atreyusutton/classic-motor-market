@@ -1,8 +1,9 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight, Menu } from "lucide-react"
+import { ArrowUpRight, LogOut, Menu } from "lucide-react"
 
-import { auth } from "@/auth"
+import { auth, signOut } from "@/auth"
+import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -20,10 +21,36 @@ export async function Header() {
   const session = await auth()
   const isAuthed = Boolean(session?.user)
 
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
+  let events = await prisma.event
+    .findMany({
+      where: { active: true, date: { gte: oneDayAgo } },
+      orderBy: { date: "asc" },
+    })
+    .catch(() => [] as Array<{ id: number; title: string; shortTitle: string | null; date: Date }>)
+
+  if (events.length === 0) {
+    const next = await prisma.event
+      .findFirst({
+        where: { date: { gte: oneDayAgo } },
+        orderBy: { date: "asc" },
+      })
+      .catch(() => null)
+    if (next) events = [next]
+  }
+
+  const fallbackLong = "FUELFED CLASSIC MOTOR MARKET POP-UP: MAY 15, 2026 / AT 2028 LEIGH / NORTHBROOK, IL / 9:00 TO 11:00AM"
+  const fallbackShort = "FUELFED POP-UP: MAY 15, 2026"
+  const longText = events.length === 0 ? fallbackLong : events.map((e) => e.title).join(" • ")
+  const shortText =
+    events.length === 0
+      ? fallbackShort
+      : events.map((e) => e.shortTitle || e.title).join(" • ")
+
   const menuLinks: NavLink[] = [
     { label: "Browse Vehicles", href: "/listings" },
     { label: "List a Vehicle", href: "/sell" },
-    ...(!isAuthed ? [{ label: "Become a Member", href: "/register" }] : [{ label: "List a Vehicle", href: "/sell" }]),
+    ...(!isAuthed ? [{ label: "Become a Member", href: "/register" }] : []),
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
     isAuthed
@@ -39,11 +66,11 @@ export async function Header() {
   return (
     <>
       <div className="bg-brand-dark text-white overflow-hidden">
-        <SiteContainer className="py-2 text-center text-[0.6rem] min-[800px]:text-[0.68rem] font-semibold uppercase tracking-[0.15em] min-[800px]:tracking-[0.2em] px-4 whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <span className="hidden min-[1080px]:inline">FUELFED CLASSIC MOTOR MARKET POP-UP: MAY 15, 2026 / AT 2028 LEIGH NORTHBROOK / 9:00 TO 11:00AM</span>
-          <span className="min-[1080px]:hidden">FUELFED POP-UP: MAY 15, 2026</span>
-        </SiteContainer>
-      </div>
+          <SiteContainer className="py-2 text-center text-[0.6rem] min-[800px]:text-[0.68rem] font-semibold uppercase tracking-[0.15em] min-[800px]:tracking-[0.2em] px-4 whitespace-nowrap overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <span className="hidden min-[1080px]:inline">{longText}</span>
+            <span className="min-[1080px]:hidden">{shortText}</span>
+          </SiteContainer>
+        </div>
       <header className="sticky top-0 left-0 right-0 z-50 border-b border-border-strong bg-white shadow-sm">
         <SiteContainer bleed className="py-2 min-[800px]:py-4 max-w-none px-3 sm:px-6">
           <div className="flex items-center justify-between gap-2 sm:gap-4">
@@ -68,6 +95,21 @@ export async function Header() {
 
             {/* Right: CTA button + hamburger */}
             <div className="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
+              {!isAuthed && (
+                <Link
+                  href="/login"
+                  className="hidden min-[800px]:inline-flex items-center uppercase tracking-[0.18em] text-[0.7rem] font-semibold text-brand-dark hover:text-brand-gold transition-colors px-2 h-9 md:h-10"
+                >
+                  Log In
+                </Link>
+              )}
+              <Button
+                asChild
+                variant="outline"
+                className="hidden min-[800px]:inline-flex uppercase tracking-[0.18em] text-[0.7rem] px-4 h-9 md:h-10 border-brand-dark text-brand-dark bg-white hover:bg-brand-dark/5 hover:text-brand-dark"
+              >
+                <Link href="/listings">Browse Vehicles</Link>
+              </Button>
               <Button
                 asChild
                 variant="default"
@@ -109,6 +151,25 @@ export async function Header() {
                       </Link>
                     </DropdownMenuItem>
                   ))}
+                  {isAuthed && (
+                    <>
+                      <DropdownMenuSeparator className="bg-brand-dark/30" />
+                      <form
+                        action={async () => {
+                          "use server"
+                          await signOut({ redirectTo: "/" })
+                        }}
+                      >
+                        <button
+                          type="submit"
+                          className="flex w-full items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-[0.7rem] uppercase tracking-[0.18em] text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          <span>Sign Out</span>
+                          <LogOut className="h-3.5 w-3.5" />
+                        </button>
+                      </form>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

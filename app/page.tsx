@@ -9,6 +9,7 @@ import { cn, getCloudflareImageUrl, formatCurrency, generateListingSlug } from "
 import { MembershipBenefits } from "@/components/membership-benefits"
 import { shouldShowAsPlaceholder, createPlaceholderListing } from "@/lib/listing-utils"
 import { MemberListingsBanner } from "@/components/listing/member-listings-banner"
+import { AdSlot } from "@/components/ads/ad-slot"
 
 export const dynamic = "force-dynamic"
 
@@ -302,6 +303,11 @@ export default async function Home() {
                 Listings return shortly. Preparing the next showcase.
               </div>
             ) : null}
+          </div>
+
+          {/* Sponsored */}
+          <div className="pt-8 sm:pt-12">
+            <AdSlot placement="home" className="mx-auto max-w-5xl" />
           </div>
 
           {/* Browse Vehicles CTA */}
